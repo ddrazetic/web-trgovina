@@ -1,0 +1,605 @@
+// $color1: #00bd7e
+$color1: #0396d7
+$color1light: #72c1e2
+$colorShadow: #005072
+$color2: #ffe0dd
+$color2dark: #ff5754
+// $color2: #02dbd4bd
+$color3: #6200e398
+$colorText: #000
+*
+    margin: 0
+    padding: 0
+    color: $colorText
+// p
+//     color: blue
+// body
+//     background-color: #ebebeb
+// div
+//     height: 300px
+.tre1
+    background-color: $color1
+.tre2
+    background-color: $color2
+.tre3
+    background-color: $color3
+
+nav
+    background-color: $color1
+
+.widthConteiner
+    max-width: 1200px
+    // background-color: red
+    display: flex
+    margin: 0 auto
+    padding: 1rem
+.navTitle
+    color: white
+    font-size: clamp(2rem,3vw,3.3rem)
+    font-weight: bolder
+    text-decoration-line: none
+    text-shadow: 2px 2px 4px $colorShadow
+.navSearchInput
+    font-size: 1.35rem
+    padding: 2px
+    border: $color1 2px solid
+    border-radius: 7px
+    text-align: center
+.navSearch
+    display: flex
+    align-items: center
+    margin-left: auto
+.navCart
+    background-color: $color1
+.productcountcart
+    float: left
+    font-size: 2rem !important
+    color: #2D527C
+    margin-top: 7px !important
+    margin-right: -9px
+
+textarea:focus, input:focus
+    outline: none !important
+    border: 2px solid $color1
+    box-shadow: 3px 3px 10px $colorShadow
+.navSearchButton
+    width: 50px
+    height: 50px
+    padding: 0
+    outline: none
+    border: none
+    cursor: pointer
+    margin-right: 2rem
+    margin-left: 1rem
+    &:hover
+        opacity: 0.7
+        // padding-bottom: 3px
+        background-color: $color1
+// .navLogIn
+//     margin-right: 100px
+    // margin-left: 1rem
+//     background-color: red
+//     &:hover
+//         padding-bottom: 3px
+//         height: 47px
+
+.navSearchImage
+    max-width: 100%
+    height: 100%
+    background-color: $color1
+.navFloatRight
+    margin-left: auto
+    // margin-right: 3rem
+    // background-color: red
+
+.menu
+    width: 100px
+    height: 60px
+    cursor: pointer
+    zoom: 0.7
+    display: none
+    // margin-left: 20px
+
+.bar,
+.bar:after,
+.bar:before
+    width: 60px
+    height: 10px
+    box-shadow: 3px 3px 10px $colorShadow
+
+.bar
+    position: relative
+    transform: translateY(25px)
+    background: #ffffff
+    transition: all 0ms 300ms
+
+.bar:before
+    content: ""
+    position: absolute
+    left: 0
+    bottom: 25px
+    background: #ffffff
+    transition: bottom .3s .3s cubic-bezier(0.23, 1, 0.32, 1), transform .3s cubic-bezier(0.23, 1, 0.32, 1)
+
+.bar:after
+    content: ""
+    position: absolute
+    left: 0
+    top: 25px
+    background: #ffffff
+    transition: top .3s .3s cubic-bezier(0.23, 1, 0.32, 1), transform .3s cubic-bezier(0.23, 1, 0.32, 1)
+
+.animate
+    background: rgba(255, 255, 255, 0)
+    &::after
+        top: 0
+        transform: rotate(45deg)
+        transition: top .3s cubic-bezier(0.23, 1, 0.32, 1), transform .3s .3s cubic-bezier(0.23, 1, 0.32, 1)
+
+    &::before
+        bottom: 0
+        transform: rotate(-45deg)
+        transition: bottom .3s cubic-bezier(0.23, 1, 0.32, 1), transform .3s .3s cubic-bezier(0.23, 1, 0.32, 1)
+
+        // background-color: red !important
+
+// home page------------------------------------------------------------------
+
+.contentContainer
+    max-width: 1200px
+    background-color: #ffffff
+    margin: 0 auto
+.homeImageContainer
+    max-width: 650px
+    margin-left: auto
+    img
+        width: 100%
+.homeContainer
+    display: flex
+.homeText
+    text-align: center
+    margin: auto auto
+    h1
+        color: $color1
+        font-size: clamp(1.5rem,4.2vw,3rem)
+    h3
+        font-size: clamp(1.2rem,2.7vw,1.7rem)
+
+// categories----------------------------------------------------------------------------------------------
+
+.show_list
+    transform: translate(0) !important
+    padding: 0 1rem
+
+.list
+    color: #000
+    background-color: white
+    border-right: solid 2px $color2
+    position: fixed
+    display: flex
+    flex-direction: column
+    top: 0
+    left: 0
+    max-width: 300px
+    height: 100%
+    z-index: 99
+    transition: all 1s ease
+    transform: translate(-300px)
+    .headerList
+        // height: 4rem
+        color: $color2dark
+        text-shadow: 1px 1px 3px #ad6262
+        margin-bottom: 2rem
+        font-size: 2rem
+        display: flex
+        justify-content: center
+        align-items: center
+    ul
+        overflow: auto
+
+        li
+            list-style: none
+            border-top: solid $color2 1px
+        li:last-child
+            border-bottom: solid $color2 1px
+.show_cart
+    transform: translate(0) !important
+    padding: 0 1rem
+
+.cart
+    color: #444444 !important
+
+    background-color: white
+    // border-left: solid 2px $color2
+    position: fixed
+    display: flex
+    flex-direction: column
+    top: 0
+    right: 0
+    width: 300px
+    height: 100%
+    z-index: 99
+    transition: all 1s ease
+    transform: translate(300px)
+    .cartProductTitle
+        color: $color2dark
+        text-shadow: 1px 1px 3px #ad6262
+    .headerList
+        // height: 4rem
+        color: $color2dark
+        text-shadow: 1px 1px 3px #ad6262
+        margin-bottom: 2rem
+        font-size: 2rem
+        display: flex
+        justify-content: center
+        align-items: center
+    .cartInfo
+        border-top: solid 2px $color2
+        border-bottom: solid 2px $color2
+        padding-top: 2rem
+        padding-bottom: 2rem
+        margin-top: 1rem
+        margin-bottom: 1rem
+        display: flex
+        flex-direction: column
+        gap: 1rem
+        .cartCount
+            color: #444444 !important
+
+        .cartPrice
+            color: #444444 !important
+
+        .cartCheckout
+            text-decoration-line: none
+            background-color: $color2
+            color: #444444
+            text-align: center
+            padding: 10px
+            border: solid 3px $color2
+            font-size: 1.4rem
+            &:hover
+                background-color: white
+    ul
+        overflow: auto
+
+        li
+            list-style: none
+            padding: 1rem 0
+            border-top: solid $color2 1px
+            display: flex
+            gap: 1rem
+            .sliderImage
+                max-width: 80px
+                max-height: 80px
+                img
+                    width: 100%
+                    height: 100%
+            .cartProductInfo
+                width: 100%
+                button
+                    float: right
+                    color: $color2dark
+                    text-shadow: 1px 1px 3px #ad6262
+                    font-size: 1.2rem
+                    background-color: white
+                    border: none
+                    cursor: pointer
+                    &:hover
+                        opacity: 0.8
+                input
+                    width: 40px
+                    padding: 5px
+                    border: 1px solid $color2
+                .cartProductName
+                    margin-bottom: 10px
+                    font-size: 1.2rem
+        li:last-child
+            border-bottom: solid $color2 1px
+.showCategories
+    cursor: pointer
+    margin-top: 1rem
+    font-size: 1.1rem
+    &:hover
+        color: $color2dark
+.closeCategories
+    cursor: pointer
+    font-size: 1.5rem
+    margin-left: auto
+    &:hover
+        color: $color2dark
+.button-list
+    width: 15rem
+    padding: 0.5rem 0.5rem
+    font-size: 1.05rem
+    cursor: pointer
+    color: #000000
+    border: none
+    background-color: #ffffff
+    overflow: auto
+    // text-shadow: 1px 1px 3px #ad6262
+    &:hover
+        color: #ffffff
+        background-color: $color2
+        text-shadow: 5px 3px 10px #000000
+.showCategoriesSlide
+    position: fixed
+    top: 100px
+    cursor: pointer
+    padding: 10px
+    width: 150px
+    left: 0
+    background-color: $color2
+
+    transition: all 1s ease
+    transform: translate(-130px)
+    p
+        float: left
+        margin-top: 2px
+        color: black
+    img
+        float: right
+    &:hover
+        transform: translate(0) !important
+.body-overlay
+    width: 100vw
+    height: 100vh
+    display: none
+    position: fixed
+    z-index: 3
+    top: 0
+    overflow: hidden
+    background: rgba(0, 0, 0, 0.6)
+.body-overlay-active
+    display: block !important
+
+// sliders----------------------------------------
+
+.containerSlider
+    width: 90%
+    margin: 0 auto
+
+.slick-prev:before,
+.slick-next:before
+    color: $color1
+.blueLine
+    width: 100%
+    border-bottom: 1px solid $color1
+
+.sliderTitle
+    color: $color1
+    margin-bottom: 1rem
+    text-transform: uppercase
+
+.sliderProductContainer
+    display: flex !important
+    flex-direction: column
+    box-sizing: border-box
+    max-width: 90%
+    height: 35rem
+    margin-left: 5%
+    margin-bottom: 5px
+    margin-top: 5px
+    padding: 10px
+    border: solid 1px $color1
+    border-radius: 8px
+    &:hover
+        border: solid 2px $color1
+        box-shadow: 2px 2px 2px 2px $color1light
+    .priceButtonContainer
+        margin-top: auto
+
+    .sliderProductName
+        text-align: center
+        height: 1.4rem
+        margin-bottom: 1rem
+        font-size: 1.4rem
+    .sliderImage
+        max-height: 300px
+        img
+            width: 100%
+            height: 100%
+    .sliderProductDescription
+        padding: 1.3rem
+    .sliderProductPrice
+        float: left
+        font-size: 2rem
+        &:hover
+            color: $color1
+.productSliderButton
+    width: 50px
+    height: 50px
+    cursor: pointer
+    float: right
+    background-color: white
+    border: solid 1px $color1
+    &:hover
+        background-color: $color1light
+        opacity: 0.8
+    img
+        width: 100%
+.margintop
+    margin-top: 3rem
+
+footer
+    max-width: 1200px
+    margin: 0 auto
+    text-align: center
+    margin-top: 3rem
+    p
+        padding: 1rem
+        color: $color1
+
+// product------------------------------------------------------------
+.productContainer
+    padding-top: 5rem
+    display: flex
+    gap: 3rem
+    margin-bottom: 7rem
+    .productImage
+        max-width: 600px
+        max-height: 600px
+        // background-color: red
+        display: flex
+        flex: 1
+        img
+            width: 100%
+            height: 100%
+    .productText
+        display: flex
+        flex-direction: column
+        justify-content: center
+        gap: 2rem
+        .productName
+            font-size: clamp(2rem,4vw,3rem)
+            &:hover
+                color: $color1
+        .productPrice
+            font-size: clamp(2.5rem,4.5vw,3.5rem)
+            color: $color1
+            &:hover
+                color: black
+        p
+            font-size: clamp(1.2rem,2.3vw,1.5rem)
+            span
+                display: block
+                width: 100%
+                border-bottom: solid 1px $color1
+        .productSliderButtonBigger
+            width: 80px
+            height: 80px
+            margin-left: auto
+@media screen and (max-width: 900px)
+    .menu
+        display: block
+    .widthConteiner
+        flex-direction: column
+
+    .titleMenu
+        display: flex
+    .menu
+        margin-left: auto
+    .navSearch
+        display: none
+        margin: 2rem auto !important
+        max-width: 750px
+    .navSearchInput
+        width: 100%
+        flex-grow: 1
+    .navFloatRight
+        margin: 0 auto
+        display: none
+    .navSearchActive
+        display: flex
+    .navSearchButton
+        width: 40px
+        height: 40px
+        padding: 0
+        margin-right: 0.5rem
+        margin-left: 0.5rem
+    .navFloatRightActive
+        display: flex
+
+    .homeContainer
+        flex-direction: column
+        padding-top: 1rem
+    .homeImageContainer
+        margin: 0 auto
+    .contentContainer
+        padding: 0 10px
+    .showCategoriesSlide
+        position: relative
+        display: flex
+        width: 180px
+        justify-content: center
+        top: 0px
+        margin: 20px auto
+        gap: 10px
+        transition: none
+        transform: none
+        &:hover
+            opacity: 0.8
+    .productContainer
+        flex-direction: column
+        .productImage
+            margin: 0 auto
+            width: 100%
+    .productText
+        text-align: center
+
+// login---------------------------------------------------
+
+.loginContainer
+    margin-top: 5rem
+    margin-bottom: 10rem
+    .homeImageContainer
+        max-width: 500px !important
+        display: flex
+        flex-grow: 1
+        // margin-left: 0
+    .homeText
+        text-align: center
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap')
+
+$background-color: #D7CCC8
+$font-family: 'Roboto', sans-serif
+
+@mixin btn($fontcolor: #FAFAFA)
+    font-family: 'Roboto', sans-serif
+    font-size: 15px
+    outline: 0
+    border: 0
+    width: 100%
+    padding: 15px
+    cursor: pointer
+    background: $color1
+    color: $fontcolor
+    text-transform: uppercase
+
+@mixin message($fontcolor: #90A4AE)
+    color: $fontcolor
+    text-align: center
+    font-family: 'Roboto', sans-serif
+    font-size: 14px
+
+@mixin input($bkgnd: #F5F5F5)
+    font-family: $font-family
+    width: 100%
+    border: 0
+    margin: 0 0 15px
+    padding: 15px
+    outline: 0
+    font-size: 15px
+    text-align: center
+    box-sizing: border-box
+    background: $bkgnd
+
+.container
+    padding: 8% 0 0
+    width: 365px
+    margin: auto
+
+.form
+    position: relative
+    z-index: 1
+    max-width: 350px
+    margin: 0 auto
+    padding: 45px
+    background: #FFFFFF
+    box-shadow: 2px 2px 4px 4px $color1light
+    input
+        @include input
+
+    ::placeholder
+        color: #90A4AE
+
+.btn
+    @include btn
+
+.message
+    @include message
+    a
+        text-decoration: none
+        color: #00BFA5
+
+.form .register-form
+    display: none
