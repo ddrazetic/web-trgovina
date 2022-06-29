@@ -8,7 +8,8 @@ const Article = db.define('article', {
         allowNull: false
     },
     name: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true
     },
     description: {
         type: DataTypes.TEXT
@@ -17,7 +18,13 @@ const Article = db.define('article', {
         type: DataTypes.INTEGER
     },
     specs: {
-        type: DataTypes.ARRAY
+        type: DataTypes.ARRAY(DataTypes.STRING)
+    },
+    units_available: {
+        type: DataTypes.SMALLINT
+    },
+    units_sold: {
+        type: DataTypes.SMALLINT
     }
 
 })

@@ -38,6 +38,7 @@ app.get('/',(req, res) => {
 
 // Category routes
 app.use('/categories', require('./server/routes/categories.js'))
+app.use('/articles', require('./server/routes/articles.js'))
 
 app.listen(PORT, ()=> {
     console.log(`Server is running on http://localhost:${PORT}`);
