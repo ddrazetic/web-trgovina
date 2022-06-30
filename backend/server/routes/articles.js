@@ -12,7 +12,7 @@ router.get('/', (req, res)=>{
 });
 
 router.post('/', async (req, res)=>{
-    specs = req.body.specs.split(", ");
+    const specs = req.body.specs.split(", ");
     const article = await Article.create({
         category_id : req.body.category_id,
         name: req.body.name,
@@ -32,7 +32,7 @@ router.post('/', async (req, res)=>{
 
 router.put('/:id', async (req, res)=>{
     const name = req.body.name;
-    console.log(req.body.units_available)
+    const specs = req.body.specs.split(", ");
     if(!(typeof name === 'string' || name instanceof String)){
         return res.status(400).send('Given name is not a string');
     }
@@ -41,7 +41,15 @@ router.put('/:id', async (req, res)=>{
             if(article === null){
                 return res.status(404).send({message: 'Article with given id does not exist.'});
             }
-            await article.update({ name: req.body.name })
+            await article.update({
+                category_id : req.body.category_id,
+                name: req.body.name,
+                description: req.body.description,
+                price: req.body.price,
+                specs: specs,
+                units_available: req.body.units_available,
+                units_sold: 0
+            })
                 .then((article)=>{
                     return res.status(200).send(article);
                 })

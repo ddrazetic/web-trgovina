@@ -3,9 +3,18 @@ const db = require('../database/database.js')
 const Category = require('../model/Category')
 
 const Article = db.define('article', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
     category_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references:{
+            model: Category,
+            key: 'id'
+        }
     },
     name: {
         type: DataTypes.STRING,
@@ -28,5 +37,7 @@ const Article = db.define('article', {
     }
 
 })
+
+Article.sync()
 
 module.exports = Article;
