@@ -37,7 +37,4 @@ const Article = db.define('article', {
     }
 
 })
-
-Article.sync()
-
 module.exports = Article;

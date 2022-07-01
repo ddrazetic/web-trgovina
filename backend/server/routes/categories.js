@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/database.js')
-const Category = require('../model/Category')
-
+const Category = require('../model/category')
 router.get('/', (req, res)=>{
     Category.findAll()
         .then( categories => {
@@ -12,7 +11,6 @@ router.get('/', (req, res)=>{
 });
 
 router.post('/', async (req, res)=>{
-    console.log(req.body)
     const name = req.body.name;
     if(!name){
         return res.status(400).send('Missing name!') 
@@ -70,4 +68,7 @@ router.delete('/:id', async (req, res) =>{
             return res.status(400).send(err);
         });
 })
+
+
+
 module.exports = router;

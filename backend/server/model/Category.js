@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize')
 const db = require('../database/database.js')
+const Article = require('../model/Article')
 
 const Category = db.define('category', {
     id: {
@@ -13,7 +14,4 @@ const Category = db.define('category', {
         unique: true
     }
 })
-
-Category.sync()
-
 module.exports = Category;
