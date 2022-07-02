@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useStores } from "../Stores/StoresContex";
 import { observer } from "mobx-react";
 import Slider from "react-slick";
@@ -35,21 +35,26 @@ const SliderNewProducts = observer(() => {
     ],
   };
   const rootStore = useStores();
+  useEffect(() => {
+    rootStore.getNewestProducts();
+  }, [rootStore]);
   return (
     <div className="containerSlider">
       <div className="blueLine"></div>
       <h2 className="sliderTitle"> Najnoviji proizvodi </h2>
       <Slider {...settings}>
-        {rootStore.products.map((store, index) => {
+        {rootStore.newestProducts.map((store, index) => {
           return (
             <div className="sliderProductContainer" key={index}>
-              <h3 className="sliderProductName">{store.name}</h3>
+              <h3 className="sliderProductName">
+                {store.name.substring(0, 20)}
+              </h3>
               <Link to={`/product/${store.id}`} className="sliderImage">
                 <img src={Laptop} alt="product" />
               </Link>
-              <p className="sliderProductDescription">{store.category}</p>
+              <p className="sliderProductDescription">{store.description}</p>
               <div className="priceButtonContainer">
-                <p className="sliderProductPrice">{store.lat} kn</p>
+                <p className="sliderProductPrice">{store.price} kn</p>
                 <button className="productSliderButton">
                   <img src={AddtoCart} alt="product" title="Add to cart" />
                 </button>

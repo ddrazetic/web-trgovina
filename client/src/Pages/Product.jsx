@@ -25,20 +25,28 @@ const Product = observer(() => {
         <div className="productText">
           <h1 className="productName">{rootStore.currentProduct.name}</h1>
           <h2 className="productPrice">
-            Cijena: {rootStore.currentProduct.lat} kn
+            Cijena: {rootStore.currentProduct.price} kn
           </h2>
           <p className="productDescription">
             <span>Opis:</span>
-            {rootStore.currentProduct.category}
+            {rootStore.currentProduct.description}
           </p>
           <p className="productCount">
-            Dostupno: <strong>{rootStore.currentProduct.lng}</strong>
+            Dostupno:{" "}
+            <strong>{rootStore.currentProduct.units_available}</strong>
           </p>
           <button className="productSliderButton productSliderButtonBigger">
             <img src={AddtoCart} alt="product" title="Add to cart" />
           </button>
         </div>
       </div>
+      <h3 className="specs-title">Specifikacije:</h3>
+      <ul className="specs">
+        {rootStore.currentProduct.specs &&
+          rootStore.currentProduct.specs.map((store, index) => {
+            return <li key={index}>{store}</li>;
+          })}
+      </ul>
       <SliderNewProducts />
     </div>
   );

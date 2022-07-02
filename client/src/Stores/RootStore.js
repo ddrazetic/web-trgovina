@@ -39,9 +39,9 @@ class RootStore {
     this.state = "pending";
     try {
       const data = await this.ProductService.get();
-      console.log(data);
+      // console.log(data);
       runInAction(() => {
-        console.log(data.data);
+        // console.log(data.data);
         this.products = data.data;
         this.numberOfProducts = data.data.length;
         // console.log(this.numberOfCategories);
@@ -54,121 +54,8 @@ class RootStore {
     }
   };
 
-  // categories = [
-  //   {
-  //     id: 1,
-  //     name: "McDonald's - food",
-  //     nameLink: "McDonald%27s",
-  //     lat: 45.55,
-  //     lng: 18,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "dm - cosmetics",
-  //     nameLink: "Dm-drogerie_markt",
-  //     lat: 45.55,
-  //     lng: 18.696078454047157,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Spar - store",
-  //     nameLink: "SPAR_(retailer)",
-  //     lat: 45.55,
-  //     lng: 18.692632655771277,
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Müller - cosmetics",
-  //     nameLink: "Müller_(store)",
-  //     lat: 45.54,
-  //     lng: 18.709641155059742,
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "IKEA - furniture",
-  //     nameLink: "IKEA",
-  //     lat: 45.54,
-  //     lng: 18.68881878214098,
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Konzum - store",
-  //     nameLink: "Konzum",
-  //     lat: 45.55,
-  //     lng: 18.69598254513013,
-  //   },
-  //   {
-  //     id: 7,
-  //     name: "Kaufland - store",
-  //     nameLink: "Kaufland",
-  //     lat: 45.54,
-  //     lng: 18.709384694091177,
-  //   },
-  // ];
-  products = [
-    {
-      id: 1,
-      name: "Laptop Lenovo legion",
-      nameLink: "McDonald%27s",
-      lat: 45.55,
-      lng: 18.69,
-      category: "opis opis opis opis opisopis opis opis opisopis",
-    },
-    {
-      id: 2,
-      name: "Komp",
-      nameLink: "Dm-drogerie_markt",
-      lat: 45.55,
-      lng: 18.696078454047157,
-      category: "opis opis opis opis opisopis opis opis opisopis",
-    },
-    {
-      id: 3,
-      name: "monitor",
-      nameLink: "SPAR_(retailer)",
-      lat: 45.55,
-      lng: 18.692632655771277,
-      category: "opis opis opis opis opisopis opis opis opisopis",
-    },
-    {
-      id: 4,
-      name: "usb",
-      nameLink: "Müller_(store)",
-      lat: 45.54,
-      lng: 18.709641155059742,
-      category: "opis opis opis opis opisopis opis opis opisopis",
-    },
-    {
-      id: 5,
-      name: "rac",
-      nameLink: "IKEA",
-      lat: 45.6,
-      lng: 18.68881878214098,
-      category: "ekrani",
-    },
-    {
-      id: 6,
-      name: "Konzum - store",
-      nameLink: "Konzum",
-      lat: 45.26,
-      lng: 18.69598254513013,
-      category: "Racunala",
-    },
-    {
-      id: 7,
-      name: "Kaufland - store",
-      nameLink: "Kaufland",
-      lat: 45.51,
-      lng: 18.709384694091177,
-      category: "Racunala",
-    },
-  ];
-
   toggleHamburger = () => {
     this.isOpenHamburger = !this.isOpenHamburger;
-    // if (window.innerWidth < 800) {
-    // }
-    // console.log(window.innerWidth);
   };
   productCountCart = 10;
   productPriceCart = 59.99;
@@ -180,20 +67,52 @@ class RootStore {
   error = "error";
   searchInput = "";
   currentProduct = [];
-
+  mostSellingProducts = [];
+  newestProducts = [];
   setShowingList = () => {
     this.showingList = !this.showingList;
     // console.log(this.showingList);
   };
   setShowingCart = () => {
     this.showingCart = !this.showingCart;
-    console.log(this.showingCart);
+    // console.log(this.showingCart);
   };
-  findProduct = (id) => {
-    this.currentProduct = this.products.find((obj) => {
+  setCurrentProduct = (product) => {
+    this.currentProduct = product;
+    // console.log(this.showingCart);
+  };
+  setMostSellingProduct = (products) => {
+    this.mostSellingProducts = products;
+    // console.log(this.showingCart);
+  };
+  setNewestProduct = (products) => {
+    this.newestProducts = products;
+    // console.log(this.showingCart);
+  };
+  findProduct = async (id) => {
+    await this.getProducts();
+    const product = this.products.find((obj) => {
       return obj.id === parseInt(id);
     });
-    console.log(toJS(this.currentProduct));
+    this.setCurrentProduct(product);
+    // console.log(toJS(this.currentProduct));
+  };
+
+  getMostSellingProducts = async () => {
+    await this.getProducts();
+
+    const sortedData = [...this.products].sort(
+      (a, b) => parseInt(b.units_sold) - parseInt(a.units_sold)
+    );
+    const mostSelling = sortedData.slice(0, 7);
+    this.setMostSellingProduct(mostSelling);
+    // console.log(this.mostSellingProducts);
+  };
+  getNewestProducts = async () => {
+    await this.getProducts();
+    const newest = this.products.slice(-7);
+    this.setNewestProduct(newest);
+    // console.log(this.newestProducts);
   };
 }
 

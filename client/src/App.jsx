@@ -1,4 +1,5 @@
 import "./Styles/styles.css";
+import React, { useEffect } from "react";
 
 import { observer } from "mobx-react";
 import { useStores } from "./Stores/StoresContex";
@@ -17,7 +18,9 @@ import Registration from "./Pages/Restration";
 import Products from "./Pages/Products";
 const App = observer(() => {
   const rootStore = useStores();
-
+  useEffect(() => {
+    rootStore.getProducts();
+  }, [rootStore]);
   return (
     <div className="App">
       <Header />
