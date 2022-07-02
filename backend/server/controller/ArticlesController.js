@@ -1,41 +1,56 @@
 const Article = require("../model/Article");
 const Category = require('../model/Category')
 
-exports.index = (req, res) => {
+exports.index = async (req, res) => {
   res.set({
     "Access-Control-Expose-Headers": "Content-Range",
     "X-Total-Count": "100",
     "Content-Range": "posts 0-30/30",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
   });
-  Article.findAll({
-    raw: true
-  })
-    .then(async (articles) => {
-      if(articles === null){
-        return res.status(404).send({message: 'No articles available'})
-      }
-      else{
-        await Promise.all(articles.map(async (article) => {
-          await Category.findOne({
-            raw: true,
-            where: {
-              id: article.category_id
-            }
-          }).then((category) => {
-            if(category === null){
-              return res.status(400).send({message: 'Cant get category.'});
-            }
-            article.category_name = category.name
-          })
-        }));
-        return res.status(200).send(articles)
-      }
+  if(req.query.range){
+    range = JSON.parse(req.query.range)
+    Article.findAll({
+      raw: true, 
+      limit: range[1] - range[0] + 1,
+      offset: range[0],
+    }).then( async articles => articlesReturnAll(articles, res))
+      .catch(err => {
+        return res.status(400).send('Something went wrong')
     })
-    .catch((err) => {
-      return res.status(400).send({ message: err });
-    });
+  }
+  else{
+    Article.findAll({
+      raw: true
+    })
+      .then(async (articles) => articlesReturnAll(articles, res))
+      .catch((err) => {
+        return res.status(400).send({ message: err });
+      });
+  }
 };
+
+async function articlesReturnAll(articles, res){
+    if(articles === null){
+      return res.status(404).send({message: 'No articles available'})
+    }
+    else{
+      await Promise.all(articles.map(async (article) => {
+        await Category.findOne({
+          raw: true,
+          where: {
+            id: article.category_id
+          }
+        }).then((category) => {
+          if(category === null){
+            return res.status(400).send({message: 'Cant get category.'});
+          }
+          article.category_name = category.name
+        })
+      }));
+      return res.status(200).send(articles)
+    }
+}
 
 exports.show = (req, res) => {
   res.set({
