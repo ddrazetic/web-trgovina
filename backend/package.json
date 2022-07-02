@@ -5,7 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "server": "nodemon server.js",
+    "client": "cd ../ && npm start --prefix client",
+    "admin": "cd ../ && npm start --prefix admin",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run admin\""
   },
   "keywords": [
     "webshop",
@@ -16,6 +20,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",
+    "concurrently": "^7.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",

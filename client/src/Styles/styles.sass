@@ -180,7 +180,7 @@ textarea:focus, input:focus
     flex-direction: column
     top: 0
     left: 0
-    max-width: 300px
+    max-width: 400px
     height: 100%
     z-index: 99
     transition: all 1s ease
@@ -299,6 +299,7 @@ textarea:focus, input:focus
     cursor: pointer
     margin-top: 1rem
     font-size: 1.1rem
+    text-decoration: none
     &:hover
         color: $color2dark
 .closeCategories
@@ -308,7 +309,7 @@ textarea:focus, input:focus
     &:hover
         color: $color2dark
 .button-list
-    width: 15rem
+    max-width: 100%
     padding: 0.5rem 0.5rem
     font-size: 1.05rem
     cursor: pointer
@@ -603,3 +604,20 @@ $font-family: 'Roboto', sans-serif
 
 .form .register-form
     display: none
+
+// products------------------------------------
+.productsTitle
+    font-size: 2rem
+    margin: 2rem 0
+    color: $color1
+.products
+    margin-top: 2rem
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    gap: 20px
+.productContainermini
+    width: 23rem
+    margin-left: 0
+    // padding-top: 0
+    // gap: 0

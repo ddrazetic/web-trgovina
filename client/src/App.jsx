@@ -14,6 +14,7 @@ import Product from "./Pages/Product";
 import Cart from "./Components/Cart";
 import Login from "./Pages/Login";
 import Registration from "./Pages/Restration";
+import Products from "./Pages/Products";
 const App = observer(() => {
   const rootStore = useStores();
 
@@ -47,6 +48,7 @@ const App = observer(() => {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/products" element={<Products />} />
         </Routes>
       </div>
       <Footer />

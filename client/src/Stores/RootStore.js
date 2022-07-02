@@ -1,59 +1,110 @@
-import { makeAutoObservable, toJS } from "mobx";
+import { makeAutoObservable, toJS, runInAction } from "mobx";
+import CategoryService from "../Services/CategoryService";
+import ProductService from "../Services/ProductService";
+
 // import { nanoid } from "nanoid";
 // import { toast } from "react-toastify";
 
 class RootStore {
-  categories = [
-    {
-      id: 1,
-      name: "McDonald's - food",
-      nameLink: "McDonald%27s",
-      lat: 45.55,
-      lng: 18,
-    },
-    {
-      id: 2,
-      name: "dm - cosmetics",
-      nameLink: "Dm-drogerie_markt",
-      lat: 45.55,
-      lng: 18.696078454047157,
-    },
-    {
-      id: 3,
-      name: "Spar - store",
-      nameLink: "SPAR_(retailer)",
-      lat: 45.55,
-      lng: 18.692632655771277,
-    },
-    {
-      id: 4,
-      name: "Müller - cosmetics",
-      nameLink: "Müller_(store)",
-      lat: 45.54,
-      lng: 18.709641155059742,
-    },
-    {
-      id: 5,
-      name: "IKEA - furniture",
-      nameLink: "IKEA",
-      lat: 45.54,
-      lng: 18.68881878214098,
-    },
-    {
-      id: 6,
-      name: "Konzum - store",
-      nameLink: "Konzum",
-      lat: 45.55,
-      lng: 18.69598254513013,
-    },
-    {
-      id: 7,
-      name: "Kaufland - store",
-      nameLink: "Kaufland",
-      lat: 45.54,
-      lng: 18.709384694091177,
-    },
-  ];
+  constructor() {
+    this.CategoryService = new CategoryService();
+    this.ProductService = new ProductService();
+    makeAutoObservable(this);
+  }
+  categories = [];
+  state = "initial";
+  numberOfCategories = 0;
+  getCategories = async () => {
+    this.state = "pending";
+    try {
+      const data = await this.CategoryService.get();
+      // console.log(data);
+      runInAction(() => {
+        // console.log(data.data);
+        this.categories = data.data;
+        this.numberOfCategories = data.data.length;
+        // console.log(this.numberOfCategories);
+        this.state = "success";
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+      });
+    }
+  };
+
+  products = [];
+  numberOfProducts = 0;
+  getProducts = async () => {
+    this.state = "pending";
+    try {
+      const data = await this.ProductService.get();
+      console.log(data);
+      runInAction(() => {
+        console.log(data.data);
+        this.products = data.data;
+        this.numberOfProducts = data.data.length;
+        // console.log(this.numberOfCategories);
+        this.state = "success";
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+      });
+    }
+  };
+
+  // categories = [
+  //   {
+  //     id: 1,
+  //     name: "McDonald's - food",
+  //     nameLink: "McDonald%27s",
+  //     lat: 45.55,
+  //     lng: 18,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "dm - cosmetics",
+  //     nameLink: "Dm-drogerie_markt",
+  //     lat: 45.55,
+  //     lng: 18.696078454047157,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Spar - store",
+  //     nameLink: "SPAR_(retailer)",
+  //     lat: 45.55,
+  //     lng: 18.692632655771277,
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Müller - cosmetics",
+  //     nameLink: "Müller_(store)",
+  //     lat: 45.54,
+  //     lng: 18.709641155059742,
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "IKEA - furniture",
+  //     nameLink: "IKEA",
+  //     lat: 45.54,
+  //     lng: 18.68881878214098,
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Konzum - store",
+  //     nameLink: "Konzum",
+  //     lat: 45.55,
+  //     lng: 18.69598254513013,
+  //   },
+  //   {
+  //     id: 7,
+  //     name: "Kaufland - store",
+  //     nameLink: "Kaufland",
+  //     lat: 45.54,
+  //     lng: 18.709384694091177,
+  //   },
+  // ];
   products = [
     {
       id: 1,
@@ -129,10 +180,6 @@ class RootStore {
   error = "error";
   searchInput = "";
   currentProduct = [];
-
-  constructor() {
-    makeAutoObservable(this);
-  }
 
   setShowingList = () => {
     this.showingList = !this.showingList;

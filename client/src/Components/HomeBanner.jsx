@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
+import { Link } from "react-router-dom";
 import HomepageImage from "../Assets/homepageImage.jpg";
 import { useStores } from "../Stores/StoresContex";
 
@@ -14,6 +15,9 @@ const HomeBanner = observer(() => {
         <div className="showCategories" onClick={rootStore.setShowingList}>
           Prikaži kategorije
         </div>
+        <Link className="showCategories" to="/products">
+          Prikaži sve proizvode
+        </Link>
       </div>
       <div className="homeImageContainer">
         <img src={HomepageImage} alt="homepage" />
