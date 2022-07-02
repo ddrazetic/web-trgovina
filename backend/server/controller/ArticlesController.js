@@ -1,4 +1,41 @@
 const Article = require("../model/Article");
+const Category = require('../model/Category')
+
+exports.index = (req, res) => {
+  res.set({
+    "Access-Control-Expose-Headers": "Content-Range",
+    "X-Total-Count": "100",
+    "Content-Range": "posts 0-30/30",
+    "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+  });
+  Article.findAll({
+    raw: true
+  })
+    .then(async (articles) => {
+      if(articles === null){
+        return res.status(404).send({message: 'No articles available'})
+      }
+      else{
+        await Promise.all(articles.map(async (article) => {
+          await Category.findOne({
+            raw: true,
+            where: {
+              id: article.category_id
+            }
+          }).then((category) => {
+            if(category === null){
+              return res.status(400).send({message: 'Cant get category.'});
+            }
+            article.category_name = category.name
+          })
+        }));
+        return res.status(200).send(articles)
+      }
+    })
+    .catch((err) => {
+      return res.status(400).send({ message: err });
+    });
+};
 
 exports.show = (req, res) => {
   res.set({
@@ -7,35 +44,41 @@ exports.show = (req, res) => {
     "Content-Range": "posts 0-30/30",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
   });
-  if (req.query.id) {
-    const id = req.query.id;
+
+  if (req.params.id) {
+    const id = req.params.id;
     Article.findAll({
+      raw: true,
       where: {
-        id: id,
-      },
-    })
-      .then((article) => {
+        id: id
+      }
+    }).then((article) => {
         if (article.length === 0) {
-          return res
-            .status(400)
-            .send({ message: "Article with given ID does not exist." });
+          return res.status(400).send({ message: "Article with given ID does not exist." });
         } else {
-          return res.status(200).send(article);
+          Category.findOne({
+            raw: true,
+            where: {
+              id: article[0].category_id
+            }
+          }).then((category) => {
+            if(category === null){
+              return res.status(400).send({message: 'Cant get category.'});
+            }
+            article[0].category_name = category.name
+            return res.status(200).send(article);
+          })
+          
         }
       })
       .catch((err) => {
-        return res.status(400).send({ message: err });
-      });
-  } else {
-    Article.findAll()
-      .then((articles) => {
-        return res.status(200).send(articles);
+        return res.status(400).send({ message: 'Something went wrong.' });
       })
-      .catch((err) => {
-        return res.status(400).send({ message: err });
-      });
-  }
-};
+    }
+    else{
+      return res.status(400).send({message: 'Missing parameter ID.'})
+    }
+}
 
 exports.store = async (req, res) => {
   const specs = req.body.specs.split(", ");

@@ -1,5 +1,20 @@
 const Category = require("../model/Category");
 
+exports.index = (req, res) => {
+  res.set({
+    "Access-Control-Expose-Headers": "Content-Range",
+    "X-Total-Count": "100",
+    "Content-Range": "posts 0-30/100",
+    "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+  });
+  Category.findAll().then((categories) => {
+    if (categories === null) {
+      return res.status(404).send({ message: "Something went wrong!" });
+    }
+    return res.status(200).send(categories);
+  });
+};
+
 exports.show = (req, res) => {
   res.set({
     "Access-Control-Expose-Headers": "Content-Range",
@@ -7,30 +22,20 @@ exports.show = (req, res) => {
     "Content-Range": "posts 0-30/100",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
   });
-  if (req.query.id) {
-    const id = req.query.id;
-    Category.findAll({
-      where: {
-        id: id,
-      },
-    }).then((category) => {
-      if (category.length === 0) {
-        return res
-          .status(404)
-          .send({ message: "Category with given ID does not exist" });
-      } else {
-        return res.status(200).send(category);
+
+  Category.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then( category => {
+      if(category === null){
+        res.status(404).send('Category with given ID does not exist');
+      }else{
+        res.status(200).send(category)
       }
-    });
-  } else {
-    Category.findAll().then((categories) => {
-      if (categories === null) {
-        return res.status(404).send({ message: "Something went wrong!" });
-      }
-      return res.status(200).send(categories);
-    });
-  }
-};
+  } )
+}
+
 
 exports.store = async (req, res) => {
   const name = req.body.name;
@@ -40,9 +45,11 @@ exports.store = async (req, res) => {
   if (!(typeof name === "string" || name instanceof String)) {
     return res.status(400).send("Given name is not a string");
   }
-  const category = await Category.create({ name: req.body.name })
+  const category = await Category.create({
+    name: name,
+  })
     .then(() => {
-      return res.status(200).send("Category saved successfully!");
+      return res.status(200).send({ message: "Category saved successfully!" });
     })
     .catch((err) => {
       return res.status(400).send(err);
