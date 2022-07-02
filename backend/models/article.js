@@ -35,11 +35,12 @@ module.exports = (sequelize, DataTypes) => {
     description: {
         type: DataTypes.TEXT
     },
-    price: {
-        type: DataTypes.INTEGER
+    img_url: {
+      type: DataTypes.STRING(2048)
     },
-    specs: {
-        type: DataTypes.ARRAY(DataTypes.STRING)
+    price: {
+        type: DataTypes.FLOAT,
+        allowNull: false
     },
     units_available: {
         type: DataTypes.SMALLINT

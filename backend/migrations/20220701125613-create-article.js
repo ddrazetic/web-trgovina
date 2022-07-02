@@ -24,11 +24,12 @@ module.exports = {
       description: {
           type: Sequelize.TEXT
       },
-      price: {
-          type: Sequelize.INTEGER
+      img_url: {
+        type: Sequelize.STRING(2048)
       },
-      specs: {
-          type: Sequelize.ARRAY(Sequelize.STRING)
+      price: {
+          type: Sequelize.FLOAT,
+          allowNull: false
       },
       units_available: {
           type: Sequelize.SMALLINT

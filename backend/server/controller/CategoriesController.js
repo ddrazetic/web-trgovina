@@ -7,12 +7,29 @@ exports.index = (req, res) => {
     "Content-Range": "posts 0-30/100",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
   });
-  Category.findAll().then((categories) => {
-    if (categories === null) {
-      return res.status(404).send({ message: "Something went wrong!" });
-    }
-    return res.status(200).send(categories);
-  });
+  if(req.query.range){
+    range = JSON.parse(req.query.range)
+    Category.findAll({
+      raw: true, 
+      limit: range[1] - range[0] + 1,
+      offset: range[0],
+    }).then( categories => {
+      if (categories === null) {
+        return res.status(404).send({ message: "Something went wrong!" });
+      }
+      return res.status(200).send(categories);
+    })
+      .catch(err => {
+        return res.status(400).send('Something went wrong')
+    })
+  }else{
+    Category.findAll().then((categories) => {
+      if (categories === null) {
+        return res.status(404).send({ message: "Something went wrong!" });
+      }
+      return res.status(200).send(categories);
+    });
+  }
 };
 
 exports.show = (req, res) => {
