@@ -45,39 +45,30 @@ exports.show = (req, res) => {
     "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
   });
 
-  if (req.params.id) {
-    const id = req.params.id;
-    Article.findAll({
-      raw: true,
-      where: {
-        id: id
-      }
-    }).then((article) => {
-        if (article.length === 0) {
-          return res.status(400).send({ message: "Article with given ID does not exist." });
-        } else {
-          Category.findOne({
-            raw: true,
-            where: {
-              id: article[0].category_id
-            }
-          }).then((category) => {
-            if(category === null){
-              return res.status(400).send({message: 'Cant get category.'});
-            }
-            article[0].category_name = category.name
-            return res.status(200).send(article);
-          })
-          
-        }
-      })
-      .catch((err) => {
-        return res.status(400).send({ message: 'Something went wrong.' });
-      })
+  Article.findOne({
+    raw: true,
+    where: {
+      id: req.params.id
+    }
+  }).then(async article => {
+    if(article === null){
+      return res.status(404).send('Article with given ID does not exist.')
     }
     else{
-      return res.status(400).send({message: 'Missing parameter ID.'})
+      Category.findOne({
+        raw: true,
+        where: {
+          id: article.category_id
+        }
+      }).then(category => {
+        article.category_name = category.name;
+        return res.status(200).send(article)
+      }).catch( () => {
+        return res.status(400).send('Category with given ID does not exist.')
+      })
     }
+  })
+
 }
 
 exports.store = async (req, res) => {
