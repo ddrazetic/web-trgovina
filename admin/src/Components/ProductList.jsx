@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   List,
   Datagrid,
@@ -13,7 +14,7 @@ function ProductList(props) {
       <Datagrid>
         <TextField source="id" />
         <TextField source="name" />
-        <TextField source="category_id" />
+        <TextField source="category_name" />
         <TextField source="name" />
         <TextField source="description" />
         <TextField source="price" />

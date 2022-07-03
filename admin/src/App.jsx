@@ -7,6 +7,7 @@ import CategoryCreate from "./Components/CategoryCreate";
 import { authProvider } from "./Components/authProvider";
 import ProductList from "./Components/ProductList";
 import ProductCreate from "./Components/ProductCreate";
+import ProductEdit from "./Components/ProductEdit";
 function App() {
   return (
     <div className="App">
@@ -24,7 +25,7 @@ function App() {
           name="articles"
           list={ProductList}
           create={ProductCreate}
-          // edit={CategoryEdit}
+          edit={ProductEdit}
         />
       </Admin>
     </div>

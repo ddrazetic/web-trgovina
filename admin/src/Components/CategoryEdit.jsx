@@ -1,12 +1,18 @@
 import React from "react";
-import { Edit, SimpleForm, SelectInput, TextField } from "react-admin";
+import {
+  Edit,
+  SimpleForm,
+  SelectInput,
+  TextInput,
+  TextField,
+} from "react-admin";
 const CategoryEdit = (props) => {
   return (
     <div>
       <Edit {...props}>
         <SimpleForm>
-          <TextField disabled source="id" />
-          <TextField source="name" />
+          <TextInput disabled source="id" />
+          <TextInput source="name" />
         </SimpleForm>
       </Edit>
     </div>
