@@ -87,18 +87,17 @@ exports.show = (req, res) => {
 }
 
 exports.store = async (req, res) => {
-  const specs = req.body.specs.split(", ");
   const article = await Article.create({
     category_id: req.body.category_id,
     name: req.body.name,
     description: req.body.description,
+    img_url: req.body.img_url,
     price: req.body.price,
-    specs: specs,
     units_available: req.body.units_available,
     units_sold: 0,
   })
-    .then(() => {
-      return res.status(200).send({ message: "Article saved successfully!" });
+    .then((article) => {
+      return res.status(200).send(article);
     })
     .catch((err) => {
       return res.status(400).send(err);
@@ -107,7 +106,6 @@ exports.store = async (req, res) => {
 
 exports.edit = async (req, res) => {
   const name = req.body.name;
-  const specs = req.body.specs.split(", ");
   if (!(typeof name === "string" || name instanceof String)) {
     return res.status(400).send("Given name is not a string");
   }
@@ -123,8 +121,8 @@ exports.edit = async (req, res) => {
           category_id: req.body.category_id,
           name: req.body.name,
           description: req.body.description,
+          img_url: req.body.img_url,
           price: req.body.price,
-          specs: specs,
           units_available: req.body.units_available,
           units_sold: 0,
         })
