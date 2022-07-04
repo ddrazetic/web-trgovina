@@ -8,14 +8,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      category_id: {
+      categoryId: {
           type: Sequelize.INTEGER,
           allowNull: false,
-          onDelete: 'CASCADE',
           references:{
               model: 'categories',
               key: 'id'
-          }
+          },
+          onDelete: 'cascade'
       },
       name: {
           type: Sequelize.STRING,
