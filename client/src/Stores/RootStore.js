@@ -1,14 +1,19 @@
 import { makeAutoObservable, toJS, runInAction } from "mobx";
 import CategoryService from "../Services/CategoryService";
 import ProductService from "../Services/ProductService";
+import UserService from "../Services/UserService";
+import { toast } from "react-toastify";
 
 // import { nanoid } from "nanoid";
 // import { toast } from "react-toastify";
 
 class RootStore {
+  isLoggedIn = "";
   constructor() {
     this.CategoryService = new CategoryService();
     this.ProductService = new ProductService();
+    this.UserService = new UserService();
+    // this.UserService.getUser();
     makeAutoObservable(this);
   }
   categories = [];
@@ -60,7 +65,7 @@ class RootStore {
   productCountCart = 10;
   productPriceCart = 59.99;
   showingList = false;
-  isLoggedIn = false;
+  // isLoggedIn = false;
   isOpenHamburger = false;
   showingCart = false;
   loading = false;
@@ -113,6 +118,150 @@ class RootStore {
     const newest = this.products.slice(-7);
     this.setNewestProduct(newest);
     // console.log(this.newestProducts);
+  };
+
+  // REGISTER----------------------------------------------------------
+
+  email = "";
+  password = "";
+  errorR = "";
+
+  setEmail = (value) => {
+    this.email = value;
+  };
+  setPassword = (value) => {
+    this.password = value;
+  };
+  setErrorR = (value) => {
+    this.errorR = value;
+  };
+
+  onChangeEmail = (e) => {
+    this.setEmail(e.target.value);
+    this.setErrorR("");
+  };
+  onChangePassword = (e) => {
+    this.setPassword(e.target.value);
+    this.setErrorR("");
+  };
+
+  validateAll = () => {
+    if (this.email.length < 1 || this.password.length < 1) {
+      this.setErrorR("Obavezno popuniti polja!");
+      this.notifyCreateMake("obavezno popuniti polja");
+      // console.log("invalid");
+      return true;
+    }
+  };
+
+  notifyCreateMake = (mess) => toast(<p>{mess}</p>);
+
+  addUser = (e) => {
+    e.preventDefault();
+    if (!this.validateAll()) {
+      this.createUser(this.email, this.password);
+      this.setEmail("");
+      this.setPassword("");
+      this.setErrorR("");
+    }
+  };
+
+  createUser = async (email, password) => {
+    try {
+      const response = await this.UserService.register({
+        email: email,
+        password: password,
+      });
+
+      if (response.status >= 200 && response.status < 301) {
+        runInAction(() => {
+          this.state = "success";
+          this.notifyCreateMake("uspješno ste se registrirali");
+        });
+      }
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+        this.notifyCreateMake(
+          "niste se uspješno registrirali, možda već postoji korisnik s ovim emailom"
+        );
+      });
+    }
+  };
+  logUser = (e) => {
+    e.preventDefault();
+    if (!this.validateAll()) {
+      this.loginUser(this.email, this.password);
+      this.setEmail("");
+      this.setPassword("");
+      this.setErrorR("");
+    }
+  };
+
+  loginUser = async (email, password) => {
+    try {
+      const response = await this.UserService.login({
+        email: email,
+        password: password,
+      });
+
+      if (response.status >= 200 && response.status < 301) {
+        runInAction(() => {
+          // this.isLoggedIn = this.UserService.getUser().data;
+          // console.log(this.isLoggedIn);
+          // console.log(this.UserService.getUser().status);
+          this.getUser();
+
+          this.state = "success";
+          this.notifyCreateMake("uspješno ste se prijavili");
+        });
+      }
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+        this.notifyCreateMake(
+          "niste se uspješno prijavili, pokušajte ponovno!"
+        );
+      });
+    }
+  };
+  logoutUser = async () => {
+    try {
+      const response = await this.UserService.logout();
+
+      if (response.status >= 200 && response.status < 301) {
+        runInAction(() => {
+          this.state = "success";
+          this.notifyCreateMake("uspješno ste se odjavili");
+          // this.isLoggedIn = this.UserService.getUser().status;
+          // console.log(this.isLoggedIn);
+          // console.log(this.UserService.getUser().status);
+          this.getUser();
+        });
+      }
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+        this.notifyCreateMake("već ste odjavljeni!");
+      });
+    }
+  };
+  getUser = async () => {
+    try {
+      const response = await this.UserService.getUser();
+      // console.log(response);
+      if (response.status >= 200 && response.status < 301) {
+        runInAction(() => {
+          this.state = "success";
+          this.isLoggedIn = true;
+        });
+      }
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+        this.isLoggedIn = false;
+      });
+    }
   };
 }
 

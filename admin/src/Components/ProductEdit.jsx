@@ -50,6 +50,8 @@ const ProductEdit = (props) => {
           <TextInput disabled source="category_id" />
           {data && <SelectInput source="category_id" choices={data} />}
           <TextInput source="description" fullWidth multiline />
+          <TextInput source="img_url" />
+
           <NumberInput source="price" />
           <TextInput source="specs" fullWidth multiline />
           <NumberInput source="units_available" />

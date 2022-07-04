@@ -17,6 +17,7 @@ function ProductList(props) {
         <TextField source="category_name" />
         <TextField source="name" />
         <TextField source="description" />
+        <TextField source="img_url" />
         <TextField source="price" />
         <TextField source="specs" />
         <TextField source="units_available" />

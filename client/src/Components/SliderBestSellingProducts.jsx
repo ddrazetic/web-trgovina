@@ -5,6 +5,8 @@ import Slider from "react-slick";
 import Laptop from "../Assets/laptop.svg";
 import AddtoCart from "../Assets/addtocart.svg";
 import { Link } from "react-router-dom";
+import Noimage from "../Assets/noimage.png";
+
 const SliderBestSellingProducts = observer(() => {
   var settings = {
     dots: true,
@@ -51,9 +53,14 @@ const SliderBestSellingProducts = observer(() => {
                 {store.name.substring(0, 20)}
               </h3>
               <Link to={`/product/${store.id}`} className="sliderImage">
-                <img src={Laptop} alt="product" />
+                <img
+                  src={store.img_url ? store.img_url : Noimage}
+                  alt="product"
+                />
               </Link>
-              <p className="sliderProductDescription">{store.description}</p>
+              <p className="sliderProductDescription">
+                {store.description.substring(0, 150) + "..."}
+              </p>
               <div className="priceButtonContainer">
                 <p className="sliderProductPrice">{store.price} kn</p>
                 <button className="productSliderButton">

@@ -5,6 +5,7 @@ import Laptop from "../Assets/laptop.svg";
 import { observer } from "mobx-react";
 import AddtoCart from "../Assets/addtocart.svg";
 import SliderNewProducts from "../Components/SliderNewProducts";
+import Noimage from "../Assets/noimage.png";
 
 const Product = observer(() => {
   const rootStore = useStores();
@@ -20,7 +21,14 @@ const Product = observer(() => {
     <div>
       <div className="productContainer">
         <div className="productImage">
-          <img src={Laptop} alt="product" />
+          <img
+            src={
+              rootStore.currentProduct.img_url
+                ? rootStore.currentProduct.img_url
+                : Noimage
+            }
+            alt="product"
+          />
         </div>
         <div className="productText">
           <h1 className="productName">{rootStore.currentProduct.name}</h1>
@@ -40,13 +48,13 @@ const Product = observer(() => {
           </button>
         </div>
       </div>
-      <h3 className="specs-title">Specifikacije:</h3>
-      <ul className="specs">
+      {/* <h3 className="specs-title">Specifikacije:</h3> */}
+      {/* <ul className="specs">
         {rootStore.currentProduct.specs &&
           rootStore.currentProduct.specs.map((store, index) => {
             return <li key={index}>{store}</li>;
           })}
-      </ul>
+      </ul> */}
       <SliderNewProducts />
     </div>
   );

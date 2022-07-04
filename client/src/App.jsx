@@ -1,5 +1,6 @@
 import "./Styles/styles.css";
 import React, { useEffect } from "react";
+import { runInAction, autorun } from "mobx";
 
 import { observer } from "mobx-react";
 import { useStores } from "./Stores/StoresContex";
@@ -18,14 +19,24 @@ import Registration from "./Pages/Restration";
 import Products from "./Pages/Products";
 const App = observer(() => {
   const rootStore = useStores();
+
+  // useEffect(
+  //   () =>
+  //     autorun(() => {
+  //       rootStore.notifyCreateMake("obavezno popuniti polja");
+  //     }),
+  //   []
+  // );
+
   useEffect(() => {
     rootStore.getProducts();
+    rootStore.getUser();
   }, [rootStore]);
   return (
     <div className="App">
       <Header />
       <Categories />
-      <Cart />
+      {rootStore.isLoggedIn && <Cart />}
       <div
         className={`body-overlay ${
           rootStore.showingList ? "body-overlay-active" : ""

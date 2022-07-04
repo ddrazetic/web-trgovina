@@ -65,7 +65,10 @@ const Header = observer(() => {
                   alt="search"
                 />
               </button>
-              <button className="navLogOut  navSearchButton">
+              <button
+                onClick={rootStore.logoutUser}
+                className="navLogOut  navSearchButton"
+              >
                 <img
                   src={Logout}
                   title="Odjavi se"
