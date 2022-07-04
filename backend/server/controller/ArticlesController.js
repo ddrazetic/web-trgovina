@@ -14,43 +14,35 @@ exports.index = async (req, res) => {
       raw: true, 
       limit: range[1] - range[0] + 1,
       offset: range[0],
-    }).then( async articles => articlesReturnAll(articles, res))
+    }).then( async articles => {
+      if(articles === null){
+        return res.status(404).send({msg: 'Articles dont exist'})
+      }
+      else{
+        return res.status(200).send(articles)
+      }
+    })
       .catch(err => {
         return res.status(400).send('Something went wrong')
     })
   }
   else{
     Article.findAll({
-      raw: true
+      raw: true,
     })
-      .then(async (articles) => articlesReturnAll(articles, res))
+      .then(async (articles) => {
+        if(articles === null){
+          return res.status(404).send({msg: 'Articles dont exist'})
+        }
+        else{
+          return res.status(200).send(articles)
+        }
+      })
       .catch((err) => {
-        return res.status(400).send({ message: err });
+        return res.status(400).send({ msg: err });
       });
   }
 };
-
-async function articlesReturnAll(articles, res){
-    if(articles === null){
-      return res.status(404).send({message: 'No articles available'})
-    }
-    else{
-      await Promise.all(articles.map(async (article) => {
-        await Category.findOne({
-          raw: true,
-          where: {
-            id: article.category_id
-          }
-        }).then((category) => {
-          if(category === null){
-            return res.status(400).send({message: 'Cant get category.'});
-          }
-          article.category_name = category.name
-        })
-      }));
-      return res.status(200).send(articles)
-    }
-}
 
 exports.show = (req, res) => {
   res.set({
@@ -64,23 +56,14 @@ exports.show = (req, res) => {
     raw: true,
     where: {
       id: req.params.id
-    }
-  }).then(async article => {
+    },
+    include: Category
+  }).then(article => {
     if(article === null){
       return res.status(404).send('Article with given ID does not exist.')
     }
     else{
-      Category.findOne({
-        raw: true,
-        where: {
-          id: article.category_id
-        }
-      }).then(category => {
-        article.category_name = category.name;
-        return res.status(200).send(article)
-      }).catch( () => {
-        return res.status(400).send('Category with given ID does not exist.')
-      })
+      return res.status(200).send(article)
     }
   })
 
@@ -88,7 +71,7 @@ exports.show = (req, res) => {
 
 exports.store = async (req, res) => {
   const article = await Article.create({
-    category_id: req.body.category_id,
+    categoryId: req.body.categoryId,
     name: req.body.name,
     description: req.body.description,
     img_url: req.body.img_url,
@@ -114,11 +97,11 @@ exports.edit = async (req, res) => {
       if (article === null) {
         return res
           .status(404)
-          .send({ message: "Article with given id does not exist." });
+          .send({ msg: "Article with given id does not exist." });
       }
       await article
         .update({
-          category_id: req.body.category_id,
+          categoryId: req.body.categoryId,
           name: req.body.name,
           description: req.body.description,
           img_url: req.body.img_url,
@@ -144,14 +127,14 @@ exports.delete = async (req, res) => {
       if (article === null) {
         return res
           .status(404)
-          .send({ message: "Article with given id does not exist." });
+          .send({ msg: "Article with given id does not exist." });
       }
       await article
         .destroy()
         .then(() => {
           return res
             .status(200)
-            .send({ message: "Article successfully deleted." });
+            .send({ msg: "Article successfully deleted." });
         })
         .catch((err) => {
           return res.status(400).send(err);

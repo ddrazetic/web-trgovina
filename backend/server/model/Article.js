@@ -8,7 +8,7 @@ const Article = db.define('article', {
         autoIncrement: true,
         primaryKey: true
     },
-    category_id: {
+    categoryId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references:{

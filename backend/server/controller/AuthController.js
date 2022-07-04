@@ -30,7 +30,7 @@ exports.logout = (req, res) => {
 exports.register = (req, res) => {
     // Validate request
     if(!req.body){
-        res.status(400).send({ message: "Content can not be empty!"});
+        res.status(400).send({ msg: "Content can not be empty!"});
         return;
     }
 
@@ -40,7 +40,7 @@ exports.register = (req, res) => {
         }})
         .then(async user => {
             if(user !== null){
-                return res.status(400).send({message:'User with this email already exists!'});
+                return res.status(400).send({msg:'User with this email already exists!'});
             }
             else{
                 const saltHash = genPassword(req.body.password);
@@ -55,11 +55,11 @@ exports.register = (req, res) => {
                         if(err){
                             console.log(err);
                         }
-                        return res.status(200).send({user: {id: user.id, email: user.email}, message: 'Successfully registered!'});
+                        return res.status(200).send({user: {id: user.id, email: user.email}, msg: 'Successfully registered!'});
                     })
                 })
                 .catch(err => {
-                    res.status(400).send({ message: 'Something went wrong!'});
+                    res.status(400).send({ msg: 'Something went wrong!'});
                 })
             }
         })

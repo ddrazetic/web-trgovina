@@ -1,3 +1,4 @@
+const Article = require("../model/Article");
 const Category = require("../model/Category");
 
 exports.index = (req, res) => {
@@ -15,7 +16,7 @@ exports.index = (req, res) => {
       offset: range[0],
     }).then( categories => {
       if (categories === null) {
-        return res.status(404).send({ message: "Something went wrong!" });
+        return res.status(404).send({ msg: "Something went wrong!" });
       }
       return res.status(200).send(categories);
     })
@@ -25,7 +26,7 @@ exports.index = (req, res) => {
   }else{
     Category.findAll().then((categories) => {
       if (categories === null) {
-        return res.status(404).send({ message: "Something went wrong!" });
+        return res.status(404).send({ msg: "Something went wrong!" });
       }
       return res.status(200).send(categories);
     });
@@ -43,13 +44,23 @@ exports.show = (req, res) => {
   Category.findOne({
     where: {
       id: req.params.id
-    }
-  }).then( category => {
-      if(category === null){
-        res.status(404).send('Category with given ID does not exist');
-      }else{
-        res.status(200).send(category)
+    },
+  }).then( async category => {
+    if(category === null){
+      res.status(404).send('Category with given ID does not exist');
+    }else{
+      await category.getArticles({
+        raw: true
+      }).then( articles => {
+        if(articles === null){
+          return res.status(200).send(category)
+        }else{
+          category.dataValues.articles = articles;
+          return res.status(200).send(category.dataValues)
+        }
       }
+      )
+    }
   } )
 }
 
@@ -66,7 +77,7 @@ exports.store = async (req, res) => {
     name: name,
   })
     .then(() => {
-      return res.status(200).send({ message: "Category saved successfully!" });
+      return res.status(200).send({ msg: "Category saved successfully!" });
     })
     .catch((err) => {
       return res.status(400).send(err);
@@ -83,7 +94,7 @@ exports.edit = async (req, res) => {
       if (category === null) {
         return res
           .status(404)
-          .send({ message: "Category with given id does not exist." });
+          .send({ msg: "Category with given id does not exist." });
       }
       await category
         .update({ name: req.body.name })
@@ -105,14 +116,14 @@ exports.delete = async (req, res) => {
       if (category === null) {
         return res
           .status(404)
-          .send({ message: "Category with given id does not exist." });
+          .send({ msg: "Category with given id does not exist." });
       }
       await category
         .destroy()
         .then(() => {
           return res
             .status(200)
-            .send({ message: "Category successfully deleted." });
+            .send({ msg: "Category successfully deleted." });
         })
         .catch((err) => {
           return res.status(400).send(err);

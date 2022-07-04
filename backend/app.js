@@ -8,6 +8,7 @@ const session = require('express-session');
 require('./server/database/passport')
 const app = express();
 
+require('./server/associations')
 // Database
 const db = require("./server/database/database.js");
 
@@ -57,6 +58,7 @@ app.get("/", (req, res) => {
 app.use("/categories", require("./server/routes/categories.js"));
 app.use("/articles", require("./server/routes/articles.js"));
 app.use("/auth", require("./server/routes/auth.js"));
+app.use("/orders/", require("./server/routes/orders.js"))
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
