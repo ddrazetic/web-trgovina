@@ -22,6 +22,7 @@ const ProductEdit = (props) => {
           );
         }
         let actualData = await response.json();
+        console.log(actualData);
         const d = actualData.map(function (item) {
           return {
             id: item.id,
@@ -47,13 +48,13 @@ const ProductEdit = (props) => {
         <SimpleForm>
           <TextInput disabled source="id" />
           <TextInput source="name" />
-          <TextInput disabled source="category_id" />
-          {data && <SelectInput source="category_id" choices={data} />}
+          <TextInput disabled source="categoryId" />
+          {data && <SelectInput source="categoryId" choices={data} />}
           <TextInput source="description" fullWidth multiline />
           <TextInput source="img_url" />
 
           <NumberInput source="price" />
-          <TextInput source="specs" fullWidth multiline />
+          {/* <TextInput source="specs" fullWidth multiline /> */}
           <NumberInput source="units_available" />
           <TextInput disabled source="units_sold" defaultValue={0} />
         </SimpleForm>

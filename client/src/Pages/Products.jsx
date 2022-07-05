@@ -41,7 +41,17 @@ const Products = observer(() => {
               </p>
               <div className="priceButtonContainer">
                 <p className="sliderProductPrice">{store.price} kn</p>
-                <button className="productSliderButton">
+                <button
+                  disabled={!rootStore.isLoggedIn}
+                  onClick={
+                    (e) => rootStore.addToOrder(e, store)
+                    // rootStore.addToOrder(e, store.id, store.name, store.price)
+                  }
+                  className={
+                    "productSliderButton " +
+                    (!rootStore.isLoggedIn ? "disabledButton" : "")
+                  }
+                >
                   <img src={AddtoCart} alt="product" title="Add to cart" />
                 </button>
               </div>

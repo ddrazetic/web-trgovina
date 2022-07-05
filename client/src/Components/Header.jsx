@@ -45,7 +45,7 @@ const Header = observer(() => {
                 rootStore.isOpenHamburger ? "navFloatRightActive" : ""
               }`}
             >
-              <p className="productcountcart"> {rootStore.productCountCart}</p>
+              <p className="productcountcart"> {rootStore.orderQuantity}</p>
               <button
                 onClick={rootStore.setShowingCart}
                 className="navCart navSearchButton"

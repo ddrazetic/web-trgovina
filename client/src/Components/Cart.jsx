@@ -14,33 +14,54 @@ const Cart = observer(() => {
       </div>
       <h2 className="headerList">Košarica</h2>
       <div className="cartInfo">
-        <h4 className="cartCount">
-          Broj proizvoda: {rootStore.productCountCart}
-        </h4>
-        <h3 className="cartPrice">Ukupno: {rootStore.productPriceCart} kn</h3>
-        <Link className="cartCheckout" to="/checkout">
-          Nastavi
-        </Link>
+        <h4 className="cartCount">Broj proizvoda: {rootStore.orderQuantity}</h4>
+        <h3 className="cartPrice">Ukupno: {rootStore.orderCost} kn</h3>
+        <button className="cartCheckout" onClick={rootStore.addOrder}>
+          Naruči
+        </button>
       </div>
       <h2 className="cartProductTitle">Proizvodi</h2>
 
       <ul>
-        {rootStore.products.map((store, index) => {
-          return (
-            <li key={index}>
-              <div className="sliderImage">
-                <img src={Laptop} alt="product" />
-              </div>
-              <div className="cartProductInfo">
-                <button>X</button>
-                <h4 className="cartProductName">{store.name}</h4>
-                <span>Količina: </span>
-                <input type="number" />
-                <p>Dostupno: 5</p>
-              </div>
-            </li>
-          );
-        })}
+        {rootStore.order &&
+          rootStore.order.map((store, index) => {
+            return (
+              <li key={index}>
+                <div className="sliderImage">
+                  <img src={Laptop} alt="product" />
+                </div>
+                <div className="cartProductInfo">
+                  <button>X</button>
+                  <h4 className="cartProductName">
+                    {store.name.substring(0, 18)}
+                  </h4>
+                  <span>Količina: </span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={store.units_available}
+                    value={store.quantity}
+                    onChange={(e) => {
+                      store.quantity = e.target.value
+                        ? Math.max(
+                            1,
+                            Math.min(
+                              store.units_available,
+                              parseInt(e.target.value)
+                            )
+                          )
+                        : 1;
+                      rootStore.setOrderTotal();
+                    }}
+                  />
+                  <p>{store.quantity}</p>
+                  <p>
+                    Dostupno: <span>{store.units_available}</span>
+                  </p>
+                </div>
+              </li>
+            );
+          })}
       </ul>
     </div>
   );

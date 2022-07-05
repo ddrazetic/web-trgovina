@@ -18,6 +18,12 @@ const HomeBanner = observer(() => {
         <Link className="showCategories" to="/products">
           Prikaži sve proizvode
         </Link>
+        <br></br>
+        {!rootStore.isLoggedIn && (
+          <Link className="showCategories" to="/registration">
+            Regisrirajte se i započnite s kupnjom
+          </Link>
+        )}
       </div>
       <div className="homeImageContainer">
         <img src={HomepageImage} alt="homepage" />

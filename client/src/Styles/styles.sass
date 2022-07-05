@@ -383,24 +383,34 @@ textarea:focus, input:focus
     padding: 10px
     border: solid 1px $color1
     border-radius: 8px
+    // background-color: red
     &:hover
         border: solid 2px $color1
         box-shadow: 2px 2px 2px 2px $color1light
     .priceButtonContainer
-        margin-top: auto
+        // margin-top: auto
+        // background-color: red
 
     .sliderProductName
         text-align: center
         height: 1.4rem
         margin-bottom: 1rem
         font-size: 1.4rem
+        height: 4rem
     .sliderImage
-        max-height: 300px
+        max-height: 250px
+        max-width: 270px
+        margin-left: auto
+        margin-right: auto
+        margin: auto
         img
             width: 100%
             height: 100%
     .sliderProductDescription
         padding: 1.3rem
+        // background-color: blue
+        margin-top: auto
+        // bottom: 0 !important
     .sliderProductPrice
         float: left
         font-size: 2rem
@@ -631,3 +641,6 @@ $font-family: 'Roboto', sans-serif
     margin-left: 0
     // padding-top: 0
     // gap: 0
+.disabledButton
+    background-color: #b8b8b8
+    opacity: 0.3
