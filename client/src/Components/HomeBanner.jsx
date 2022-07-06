@@ -21,7 +21,7 @@ const HomeBanner = observer(() => {
         <br></br>
         {!rootStore.isLoggedIn && (
           <Link className="showCategories" to="/registration">
-            Regisrirajte se i započnite s kupnjom
+            Registrirajte se i započnite s kupnjom
           </Link>
         )}
       </div>

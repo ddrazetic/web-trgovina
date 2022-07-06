@@ -17,6 +17,8 @@ import Cart from "./Components/Cart";
 import Login from "./Pages/Login";
 import Registration from "./Pages/Restration";
 import Products from "./Pages/Products";
+import ProductsByCategory from "./Pages/ProductsByCategory";
+import Profile from "./Components/Profile";
 const App = observer(() => {
   const rootStore = useStores();
 
@@ -63,12 +65,14 @@ const App = observer(() => {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/category/:id" element={<ProductsByCategory />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
       <Footer />
       <ToastContainer
-        position="bottom-center"
-        autoClose={4000}
+        position="bottom-left"
+        autoClose={500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

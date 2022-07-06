@@ -28,13 +28,28 @@ const Cart = observer(() => {
             return (
               <li key={index}>
                 <div className="sliderImage">
-                  <img src={Laptop} alt="product" />
+                  <img src={store.img_url} alt="product" />
                 </div>
                 <div className="cartProductInfo">
-                  <button>X</button>
-                  <h4 className="cartProductName">
-                    {store.name.substring(0, 18)}
-                  </h4>
+                  <button
+                    onClick={() => {
+                      rootStore.orderCost =
+                        rootStore.orderCost - store.quantity * store.price;
+                      rootStore.orderQuantity =
+                        rootStore.orderQuantity - store.quantity;
+                      rootStore.order = rootStore.order.filter(function (el) {
+                        return el.id != store.id;
+                      });
+                    }}
+                  >
+                    X
+                  </button>
+                  <Link to={"product/" + store.id}>
+                    {" "}
+                    <h4 className="cartProductName">
+                      {store.name.substring(0, 18)}
+                    </h4>
+                  </Link>
                   <span>Količina: </span>
                   <input
                     type="number"
@@ -54,7 +69,7 @@ const Cart = observer(() => {
                       rootStore.setOrderTotal();
                     }}
                   />
-                  <p>{store.quantity}</p>
+                  {/* <p>{store.quantity}</p> */}
                   <p>
                     Dostupno: <span>{store.units_available}</span>
                   </p>

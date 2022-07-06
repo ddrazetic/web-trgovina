@@ -8,6 +8,8 @@ import { authProvider } from "./Components/authProvider";
 import ProductList from "./Components/ProductList";
 import ProductCreate from "./Components/ProductCreate";
 import ProductEdit from "./Components/ProductEdit";
+import UserList from "./Components/UserList";
+import OrderList from "./Components/OrderList";
 function App() {
   return (
     <div className="App">
@@ -26,6 +28,18 @@ function App() {
           list={ProductList}
           create={ProductCreate}
           edit={ProductEdit}
+        />
+        {/* <Resource
+          name="auth/user"
+          list={UserList}
+          // create={ProductCreate}
+          // edit={ProductEdit}
+        /> */}
+        <Resource
+          name="orders/all"
+          list={OrderList}
+          // create={ProductCreate}
+          // edit={ProductEdit}
         />
       </Admin>
     </div>

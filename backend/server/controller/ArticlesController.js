@@ -1,5 +1,5 @@
 const Article = require("../model/Article");
-const Category = require('../model/Category')
+const Category = require("../model/Category");
 
 exports.index = async (req, res) => {
   res.set({
@@ -8,34 +8,32 @@ exports.index = async (req, res) => {
     "Content-Range": "posts 0-30/30",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
   });
-  if(req.query.range){
-    range = JSON.parse(req.query.range)
+  if (req.query.range) {
+    range = JSON.parse(req.query.range);
     Article.findAll({
-      raw: true, 
+      raw: true,
       limit: range[1] - range[0] + 1,
       offset: range[0],
-    }).then( async articles => {
-      if(articles === null){
-        return res.status(404).send({msg: 'Articles dont exist'})
-      }
-      else{
-        return res.status(200).send(articles)
-      }
     })
-      .catch(err => {
-        return res.status(400).send('Something went wrong')
-    })
-  }
-  else{
+      .then(async (articles) => {
+        if (articles === null) {
+          return res.status(404).send({ msg: "Articles dont exist" });
+        } else {
+          return res.status(200).send(articles);
+        }
+      })
+      .catch((err) => {
+        return res.status(400).send("Something went wrong");
+      });
+  } else {
     Article.findAll({
       raw: true,
     })
       .then(async (articles) => {
-        if(articles === null){
-          return res.status(404).send({msg: 'Articles dont exist'})
-        }
-        else{
-          return res.status(200).send(articles)
+        if (articles === null) {
+          return res.status(404).send({ msg: "Articles dont exist" });
+        } else {
+          return res.status(200).send(articles);
         }
       })
       .catch((err) => {
@@ -55,19 +53,17 @@ exports.show = (req, res) => {
   Article.findOne({
     raw: true,
     where: {
-      id: req.params.id
+      id: req.params.id,
     },
-    include: Category
-  }).then(article => {
-    if(article === null){
-      return res.status(404).send('Article with given ID does not exist.')
+    include: Category,
+  }).then((article) => {
+    if (article === null) {
+      return res.status(404).send("Article with given ID does not exist.");
+    } else {
+      return res.status(200).send(article);
     }
-    else{
-      return res.status(200).send(article)
-    }
-  })
-
-}
+  });
+};
 
 exports.store = async (req, res) => {
   const article = await Article.create({
@@ -107,7 +103,7 @@ exports.edit = async (req, res) => {
           img_url: req.body.img_url,
           price: req.body.price,
           units_available: req.body.units_available,
-          units_sold: 0,
+          units_sold: req.body.units_sold,
         })
         .then((article) => {
           return res.status(200).send(article);
@@ -132,9 +128,7 @@ exports.delete = async (req, res) => {
       await article
         .destroy()
         .then(() => {
-          return res
-            .status(200)
-            .send({ msg: "Article successfully deleted." });
+          return res.status(200).send({ msg: "Article successfully deleted." });
         })
         .catch((err) => {
           return res.status(400).send(err);

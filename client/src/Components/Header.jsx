@@ -8,8 +8,11 @@ import Registration from "../Assets/registration.svg";
 import ShoppingCart1 from "../Assets/shoppingcart1.svg";
 import Profile from "../Assets/profile.svg";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const Header = observer(() => {
   const rootStore = useStores();
+  let navigate = useNavigate();
 
   return (
     <nav>
@@ -57,7 +60,14 @@ const Header = observer(() => {
                   alt="search"
                 />
               </button>
-              <button className="navProfile navSearchButton">
+              <button
+                type="button"
+                className="navProfile navSearchButton"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/profile");
+                }}
+              >
                 <img
                   src={Profile}
                   title="Vaš profil"
@@ -65,6 +75,7 @@ const Header = observer(() => {
                   alt="search"
                 />
               </button>
+
               <button
                 onClick={rootStore.logoutUser}
                 className="navLogOut  navSearchButton"

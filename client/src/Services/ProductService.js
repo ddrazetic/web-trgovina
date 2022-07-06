@@ -2,12 +2,16 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/articles";
 
 class ProductService {
-  get() {
+  // get() {
+  //   return axios.get(API_URL);
+  // }
+  get(params) {
+    // const params1 = new URLSearchParams({
+    //   range: "[1, 5]",
+    // });
+    if (params) return axios.get(API_URL + "?" + params);
     return axios.get(API_URL);
   }
-  // get(params) {
-  //   return axios.get(API_URL + "?" + params);
-  // }
   getOne(id) {
     return axios.get(`${API_URL}/${id}`);
   }

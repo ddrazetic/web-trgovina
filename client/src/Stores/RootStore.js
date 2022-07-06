@@ -43,11 +43,60 @@ class RootStore {
       });
     }
   };
-
+  page = 0;
+  rpp = 5;
+  params = null;
+  setPage = (value) => {
+    this.page = value;
+  };
+  setRpp = (e) => {
+    e.preventDefault();
+    this.rpp = e.target.value;
+    this.getProductsFiltered();
+  };
+  setParams = (value) => {
+    this.params = value;
+  };
+  createParams = () => {
+    const range1 = this.page * this.rpp;
+    const range2 = range1 + this.rpp - 1;
+    const params = new URLSearchParams({
+      range: `[${range1}, ${range2}]`,
+    });
+    this.setParams(params);
+  };
   products = [];
+  productsFiltered = [];
   numberOfProducts = 0;
+  numberOfProductsFiltered = 0;
+  handlePageClick = async (data) => {
+    let currentPage = data.selected;
+    this.page = currentPage;
+    this.getProductsFiltered();
+  };
+  getProductsFiltered = async () => {
+    this.state = "pending";
+    this.createParams();
+
+    try {
+      const data = await this.ProductService.get(this.params);
+      // console.log(data);
+      runInAction(() => {
+        // console.log(data.data);
+        this.productsFiltered = data.data;
+        this.numberOfProductsFiltered = data.data.length;
+        // console.log(this.numberOfCategories);
+        this.state = "success";
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+      });
+    }
+  };
   getProducts = async () => {
     this.state = "pending";
+
     try {
       const data = await this.ProductService.get();
       // console.log(data);
@@ -61,6 +110,56 @@ class RootStore {
     } catch (error) {
       runInAction(() => {
         this.state = "error";
+      });
+    }
+  };
+  categoryName = "";
+  productsByCategory = [];
+  getProductsByCategory = async (id) => {
+    this.state = "pending";
+    try {
+      const data = await this.CategoryService.getOne(id);
+      // console.log(data);
+      runInAction(() => {
+        console.log(data.data.articles);
+        this.categoryName = data.data.name;
+        this.productsByCategory = data.data.articles;
+        // this.numberOfProducts = data.data.length;
+        // console.log(this.numberOfCategories);
+        this.state = "success";
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+      });
+    }
+  };
+
+  updateProduct = async (id, units_sold, units_available) => {
+    let article = this.products.find((item) => {
+      if (item.id === id) return toJS(item);
+    });
+    // article = [
+    //   ...article[0],
+    //   { units_sold: units_sold, units_available: units_available },
+    // ];
+    article = toJS(article);
+    article.units_sold = units_sold;
+    article.units_available = units_available;
+    console.log(toJS(article));
+    try {
+      const response = await this.ProductService.update(id, article);
+
+      if (response.status === 200) {
+        runInAction(() => {
+          this.stateModel = "success";
+          console.log("update");
+        });
+      }
+    } catch (error) {
+      runInAction(() => {
+        this.stateModel = "error";
+        console.log("error");
       });
     }
   };
@@ -295,6 +394,10 @@ class RootStore {
   setOrder = (value) => {
     this.order = value;
   };
+  currentCategoryId = "";
+  setCurrentCategoryId = (value) => {
+    this.currentCategoryId = value;
+  };
   orderCost = 0;
   orderQuantity = 0;
   setOrderTotal = () => {
@@ -316,23 +419,43 @@ class RootStore {
       this.order = this.order.map((item) => {
         if (item.id === store.id) {
           this.addingNewProduct = false;
-          if (store.units_available === item.quantity) {
-            this.notifyCreateMake(
-              "maksimalan broj proizvoda dodan u košaricu!"
+          if (
+            store.units_available === item.quantity ||
+            store.units_available < 1
+          ) {
+            console.log(
+              "store ",
+              store.units_available,
+              "item ",
+              item.units_available
             );
+            this.notifyCreateMake("Maximalan broj dostupnih proizvoda!", {
+              toastId: 1,
+            });
             return item;
           }
+          this.notifyCreateMake("Dodali ste proizvod u košaricu!", {
+            toastId: 2,
+          });
           return { ...item, quantity: item.quantity + 1 };
         } else {
           return item;
         }
       });
     }
-    if (this.addingNewProduct) {
+    if (store.units_available < 1) {
+      this.notifyCreateMake("Proizvod nije više dostupan!", {
+        toastId: 1,
+      });
+    }
+    if (this.addingNewProduct && store.units_available > 0) {
       let my_object = {};
       my_object = store;
       my_object.quantity = 1;
       this.order.push(my_object);
+      this.notifyCreateMake("Dodali ste proizvod u košaricu!", {
+        toastId: 2,
+      });
     }
     this.setOrderTotal();
     this.addingNewProduct = true;
@@ -343,8 +466,8 @@ class RootStore {
     // e.preventDefault();
     // if (!this.validateAll()) {
     this.createOrder(this.order);
-    this.setOrder([]);
-    console.log(this.order);
+    // this.setOrder([]);
+    // console.log(this.order);
     //   this.setPassword("");
     //   this.setErrorR("");
     // }
@@ -358,7 +481,19 @@ class RootStore {
 
       if (response.status >= 200 && response.status < 301) {
         runInAction(() => {
+          this.order.map((item) => {
+            this.updateProduct(
+              item.id,
+              item.units_sold + item.quantity,
+              item.units_available - item.quantity
+            );
+          });
+          // this.updateProduct(17, 7, 7);
           this.state = "success";
+          this.orderCost = 0;
+          this.orderQuantity = 0;
+          this.setOrder([]);
+
           this.notifyCreateMake("uspješno ste kreirali narudžbu");
         });
       }

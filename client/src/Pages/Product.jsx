@@ -43,7 +43,24 @@ const Product = observer(() => {
             Dostupno:{" "}
             <strong>{rootStore.currentProduct.units_available}</strong>
           </p>
-          <button className="productSliderButton productSliderButtonBigger">
+
+          <button
+            disabled={
+              !rootStore.isLoggedIn ||
+              rootStore.currentProduct.units_available < 1
+            }
+            onClick={
+              (e) => rootStore.addToOrder(e, rootStore.currentProduct)
+              // rootStore.addToOrder(e, store.id, store.name, store.price)
+            }
+            className={
+              "productSliderButton productSliderButtonBigger " +
+              (!rootStore.isLoggedIn ? "disabledButton" : "") +
+              (rootStore.currentProduct.units_available < 1
+                ? "disabledButton"
+                : "")
+            }
+          >
             <img src={AddtoCart} alt="product" title="Add to cart" />
           </button>
         </div>

@@ -346,6 +346,10 @@ textarea:focus, input:focus {
   color: #ff5754;
 }
 
+.anchor-category {
+  text-decoration: none;
+}
+
 .button-list {
   max-width: 100%;
   padding: 0.5rem 0.5rem;
@@ -355,8 +359,17 @@ textarea:focus, input:focus {
   border: none;
   background-color: #ffffff;
   overflow: auto;
+  text-decoration: none;
+  -webkit-text-decoration-line: none !important;
+          text-decoration-line: none !important;
 }
 .button-list:hover {
+  color: #ffffff;
+  background-color: #ffe0dd;
+  text-shadow: 5px 3px 10px #000000;
+}
+
+.anchor-category-active {
   color: #ffffff;
   background-color: #ffe0dd;
   text-shadow: 5px 3px 10px #000000;
@@ -507,19 +520,15 @@ footer p {
 }
 .productContainer .productImage {
   max-width: 600px;
-  max-height: 600px;
-  display: flex;
-  flex: 1;
 }
 .productContainer .productImage img {
   width: 100%;
-  height: 100%;
 }
 .productContainer .productText {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  max-width: 550px;
+  max-width: 500px;
   gap: 2rem;
 }
 .productContainer .productText .productName {
@@ -642,7 +651,7 @@ footer p {
   }
   .productContainer .productImage {
     margin: 0 auto;
-    width: 100%;
+    width: 60%;
   }
 
   .productText {
@@ -731,6 +740,7 @@ footer p {
   font-size: 2rem;
   margin: 2rem 0;
   color: #0396d7;
+  text-align: center;
 }
 
 .products {
@@ -749,4 +759,35 @@ footer p {
 .disabledButton {
   background-color: #b8b8b8;
   opacity: 0.3;
+}
+
+.paginationContainer {
+  display: flex;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  gap: 10px;
+  margin: 0 auto 3rem;
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+}
+
+.page-item {
+  padding: 5px;
+  border: 0.5px solid #d6d6d6;
+  cursor: pointer;
+}
+
+.page-item-active {
+  background-color: #d6d6d6;
+}
+
+.selectForm {
+  border: 2px solid #d6d6d6;
+  padding: 2px;
+  cursor: pointer;
 }/*# sourceMappingURL=styles.css.map */
