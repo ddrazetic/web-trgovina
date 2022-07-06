@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useStores } from "../Stores/StoresContex";
 import { observer } from "mobx-react";
 import Slider from "react-slick";
 import Laptop from "../Assets/laptop.svg";
 import AddtoCart from "../Assets/addtocart.svg";
 import { Link } from "react-router-dom";
+import Noimage from "../Assets/noimage.png";
+
 const SliderNewProducts = observer(() => {
   var settings = {
     dots: true,
@@ -35,22 +37,43 @@ const SliderNewProducts = observer(() => {
     ],
   };
   const rootStore = useStores();
+  useEffect(() => {
+    rootStore.getNewestProducts();
+  }, [rootStore]);
   return (
     <div className="containerSlider">
       <div className="blueLine"></div>
       <h2 className="sliderTitle"> Najnoviji proizvodi </h2>
       <Slider {...settings}>
-        {rootStore.products.map((store, index) => {
+        {rootStore.newestProducts.map((store, index) => {
           return (
             <div className="sliderProductContainer" key={index}>
-              <h3 className="sliderProductName">{store.name}</h3>
+              <h3 className="sliderProductName">
+                {store.name.substring(0, 20)}
+              </h3>
               <Link to={`/product/${store.id}`} className="sliderImage">
-                <img src={Laptop} alt="product" />
+                <img
+                  src={store.img_url ? store.img_url : Noimage}
+                  alt="product"
+                />
               </Link>
-              <p className="sliderProductDescription">{store.category}</p>
+              <p className="sliderProductDescription">
+                {store.description.substring(0, 150) + "..."}
+              </p>
               <div className="priceButtonContainer">
-                <p className="sliderProductPrice">{store.lat} kn</p>
-                <button className="productSliderButton">
+                <p className="sliderProductPrice">{store.price} kn</p>
+                <button
+                  disabled={!rootStore.isLoggedIn || store.units_available < 1}
+                  onClick={
+                    (e) => rootStore.addToOrder(e, store)
+                    // rootStore.addToOrder(e, store.id, store.name, store.price)
+                  }
+                  className={
+                    "productSliderButton " +
+                    (!rootStore.isLoggedIn ? "disabledButton" : "") +
+                    (store.units_available < 1 ? "disabledButton" : "")
+                  }
+                >
                   <img src={AddtoCart} alt="product" title="Add to cart" />
                 </button>
               </div>

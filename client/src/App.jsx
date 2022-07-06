@@ -1,4 +1,6 @@
 import "./Styles/styles.css";
+import React, { useEffect } from "react";
+import { runInAction, autorun } from "mobx";
 
 import { observer } from "mobx-react";
 import { useStores } from "./Stores/StoresContex";
@@ -14,14 +16,29 @@ import Product from "./Pages/Product";
 import Cart from "./Components/Cart";
 import Login from "./Pages/Login";
 import Registration from "./Pages/Restration";
+import Products from "./Pages/Products";
+import ProductsByCategory from "./Pages/ProductsByCategory";
+import Profile from "./Components/Profile";
 const App = observer(() => {
   const rootStore = useStores();
 
+  // useEffect(
+  //   () =>
+  //     autorun(() => {
+  //       rootStore.notifyCreateMake("obavezno popuniti polja");
+  //     }),
+  //   []
+  // );
+
+  useEffect(() => {
+    rootStore.getProducts();
+    rootStore.getUser();
+  }, [rootStore]);
   return (
     <div className="App">
       <Header />
       <Categories />
-      <Cart />
+      {rootStore.isLoggedIn && <Cart />}
       <div
         className={`body-overlay ${
           rootStore.showingList ? "body-overlay-active" : ""
@@ -47,12 +64,15 @@ const App = observer(() => {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/category/:id" element={<ProductsByCategory />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
       <Footer />
       <ToastContainer
-        position="bottom-center"
-        autoClose={4000}
+        position="bottom-left"
+        autoClose={500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

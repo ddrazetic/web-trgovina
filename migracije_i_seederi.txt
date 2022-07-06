@@ -1,0 +1,10 @@
+Kreiranje tablica:
+npx sequelize-cli db:migrate
+
+
+Popunjavanje podacima:
+npx sequelize-cli db:seed --seed '20220701133638-demo-categories'
+npx sequelize-cli db:seed --seed '20220701140936-demo-articles'  
+
+Brisanje svega:
+npx sequelize-cli db:migrate:undo:all

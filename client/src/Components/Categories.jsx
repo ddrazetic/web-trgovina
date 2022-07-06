@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useStores } from "../Stores/StoresContex";
 import { observer } from "mobx-react";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router";
+
 const Categories = observer(() => {
   const rootStore = useStores();
+  // const { id } = useParams();
 
+  useEffect(() => {
+    rootStore.getCategories();
+    // console.log("id ", id);
+  }, [rootStore]);
   return (
     <div className={rootStore.showingList ? " list show_list" : "list"}>
       <div className="closeCategories" onClick={rootStore.setShowingList}>
@@ -14,84 +22,25 @@ const Categories = observer(() => {
         {rootStore.categories.map((store, index) => {
           return (
             <li key={index}>
-              <button
+              <Link
+                className={"anchor-category "}
+                to={`/category/${store.id}`}
                 // onClick={function () {
                 //   rootStore.setActiveMarker(store);
                 // }}
-                className="button-list"
               >
-                {store.name}
-              </button>
-            </li>
-          );
-        })}
-        {rootStore.categories.map((store, index) => {
-          return (
-            <li key={index}>
-              <button
-                // onClick={function () {
-                //   rootStore.setActiveMarker(store);
-                // }}
-                className="button-list"
-              >
-                {store.name}
-              </button>
-            </li>
-          );
-        })}
-        {rootStore.categories.map((store, index) => {
-          return (
-            <li key={index}>
-              <button
-                // onClick={function () {
-                //   rootStore.setActiveMarker(store);
-                // }}
-                className="button-list"
-              >
-                {store.name}
-              </button>
-            </li>
-          );
-        })}
-        {rootStore.categories.map((store, index) => {
-          return (
-            <li key={index}>
-              <button
-                // onClick={function () {
-                //   rootStore.setActiveMarker(store);
-                // }}
-                className="button-list"
-              >
-                {store.name}
-              </button>
-            </li>
-          );
-        })}
-        {rootStore.categories.map((store, index) => {
-          return (
-            <li key={index}>
-              <button
-                // onClick={function () {
-                //   rootStore.setActiveMarker(store);
-                // }}
-                className="button-list"
-              >
-                {store.name}
-              </button>
-            </li>
-          );
-        })}
-        {rootStore.categories.map((store, index) => {
-          return (
-            <li key={index}>
-              <button
-                // onClick={function () {
-                //   rootStore.setActiveMarker(store);
-                // }}
-                className="button-list"
-              >
-                {store.name}
-              </button>
+                <div
+                  className={
+                    "button-list  " +
+                    (parseInt(store.id) ===
+                    parseInt(rootStore.currentCategoryId)
+                      ? "anchor-category-active"
+                      : "")
+                  }
+                >
+                  {store.name}
+                </div>
+              </Link>
             </li>
           );
         })}

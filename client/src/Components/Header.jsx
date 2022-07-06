@@ -8,8 +8,11 @@ import Registration from "../Assets/registration.svg";
 import ShoppingCart1 from "../Assets/shoppingcart1.svg";
 import Profile from "../Assets/profile.svg";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const Header = observer(() => {
   const rootStore = useStores();
+  let navigate = useNavigate();
 
   return (
     <nav>
@@ -26,16 +29,23 @@ const Header = observer(() => {
         </div>
         <>
           <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              rootStore.sendSearch(e);
+              navigate("/products");
+            }}
             className={`navSearch  ${
               rootStore.isOpenHamburger ? "navSearchActive" : ""
             }`}
           >
             <input
               type="text"
+              onChange={rootStore.onChangeSearch}
+              value={rootStore.search}
               className="navSearchInput"
               placeholder="Naziv proizvoda"
             ></input>
-            <button className="navSearchButton">
+            <button type="submit" className="navSearchButton">
               <img src={Search} className="navSearchImage" alt="search" />
             </button>
           </form>
@@ -45,7 +55,7 @@ const Header = observer(() => {
                 rootStore.isOpenHamburger ? "navFloatRightActive" : ""
               }`}
             >
-              <p className="productcountcart"> {rootStore.productCountCart}</p>
+              <p className="productcountcart"> {rootStore.orderQuantity}</p>
               <button
                 onClick={rootStore.setShowingCart}
                 className="navCart navSearchButton"
@@ -57,7 +67,14 @@ const Header = observer(() => {
                   alt="search"
                 />
               </button>
-              <button className="navProfile navSearchButton">
+              <button
+                type="button"
+                className="navProfile navSearchButton"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/profile");
+                }}
+              >
                 <img
                   src={Profile}
                   title="Vaš profil"
@@ -65,7 +82,16 @@ const Header = observer(() => {
                   alt="search"
                 />
               </button>
-              <button className="navLogOut  navSearchButton">
+
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/login");
+                  rootStore.logoutUser(e);
+                }}
+                // onClick={rootStore.logoutUser}
+                className="navLogOut  navSearchButton"
+              >
                 <img
                   src={Logout}
                   title="Odjavi se"
