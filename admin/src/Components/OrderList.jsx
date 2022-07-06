@@ -6,6 +6,7 @@ import {
   EditButton,
   ArrayField,
   DeleteButton,
+  BooleanField,
 } from "react-admin";
 
 function OrderList(props) {
@@ -13,7 +14,12 @@ function OrderList(props) {
     <List {...props}>
       <Datagrid>
         <TextField source="id" />
-        <TextField source="userId" />
+        {/* <TextField source="userId" /> */}
+        <TextField source="firstName" />
+        <TextField source="lastName" />
+        <TextField source="address" />
+        <TextField source="totalQty" />
+        <TextField source="totalSum" />
         <ArrayField source="articles">
           <Datagrid bulkActionButtons={false}>
             <TextField source="id" />
@@ -22,10 +28,9 @@ function OrderList(props) {
             <TextField source="quantity" />
           </Datagrid>
         </ArrayField>
-        {/* <TextField source="articles" /> */}
-
-        {/* <EditButton /> */}
-        {/* <DeleteButton /> */}
+        <BooleanField source="status" />
+        <EditButton />
+        <DeleteButton />
       </Datagrid>
     </List>
   );

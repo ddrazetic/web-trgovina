@@ -10,6 +10,7 @@ import ProductCreate from "./Components/ProductCreate";
 import ProductEdit from "./Components/ProductEdit";
 import UserList from "./Components/UserList";
 import OrderList from "./Components/OrderList";
+import OrderEdit from "./Components/OrderEdit";
 function App() {
   return (
     <div className="App">
@@ -29,17 +30,17 @@ function App() {
           create={ProductCreate}
           edit={ProductEdit}
         />
-        {/* <Resource
-          name="auth/user"
+        <Resource
+          name="auth/all"
           list={UserList}
           // create={ProductCreate}
           // edit={ProductEdit}
-        /> */}
+        />
         <Resource
-          name="orders/all"
+          name="orders/admin"
           list={OrderList}
           // create={ProductCreate}
-          // edit={ProductEdit}
+          edit={OrderEdit}
         />
       </Admin>
     </div>

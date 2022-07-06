@@ -10,12 +10,15 @@ import {
 function UserList(props) {
   return (
     <List {...props}>
-      <Datagrid>
+      <Datagrid bulkActionButtons={false}>
         <TextField source="id" />
         <TextField source="email" />
+        <TextField source="lastName" />
+        <TextField source="firstName" />
+        <TextField source="address" />
 
         {/* <EditButton /> */}
-        <DeleteButton />
+        {/* <DeleteButton /> */}
       </Datagrid>
     </List>
   );

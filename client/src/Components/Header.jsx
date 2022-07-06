@@ -29,16 +29,23 @@ const Header = observer(() => {
         </div>
         <>
           <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              rootStore.sendSearch(e);
+              navigate("/products");
+            }}
             className={`navSearch  ${
               rootStore.isOpenHamburger ? "navSearchActive" : ""
             }`}
           >
             <input
               type="text"
+              onChange={rootStore.onChangeSearch}
+              value={rootStore.search}
               className="navSearchInput"
               placeholder="Naziv proizvoda"
             ></input>
-            <button className="navSearchButton">
+            <button type="submit" className="navSearchButton">
               <img src={Search} className="navSearchImage" alt="search" />
             </button>
           </form>
@@ -77,7 +84,12 @@ const Header = observer(() => {
               </button>
 
               <button
-                onClick={rootStore.logoutUser}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/login");
+                  rootStore.logoutUser(e);
+                }}
+                // onClick={rootStore.logoutUser}
                 className="navLogOut  navSearchButton"
               >
                 <img

@@ -4,11 +4,7 @@ import ProductService from "../Services/ProductService";
 import OrderService from "../Services/OrderService";
 import UserService from "../Services/UserService";
 import { toast } from "react-toastify";
-import { configure } from "mobx";
 
-configure({
-  enforceActions: "never",
-});
 // import { nanoid } from "nanoid";
 // import { toast } from "react-toastify";
 
@@ -22,6 +18,7 @@ class RootStore {
     // this.UserService.getUser();
     makeAutoObservable(this);
   }
+
   categories = [];
   state = "initial";
   numberOfCategories = 0;
@@ -45,9 +42,17 @@ class RootStore {
   };
   page = 0;
   rpp = 5;
+  search = "";
   params = null;
   setPage = (value) => {
     this.page = value;
+  };
+  setSearch = (value) => {
+    this.search = value;
+  };
+  onChangeSearch = (e) => {
+    this.setSearch(e.target.value);
+    // console.log(this.search);
   };
   setRpp = (e) => {
     e.preventDefault();
@@ -57,10 +62,15 @@ class RootStore {
   setParams = (value) => {
     this.params = value;
   };
+  sendSearch = (e) => {
+    e.preventDefault();
+    this.getProductsFiltered();
+  };
   createParams = () => {
     const range1 = this.page * this.rpp;
     const range2 = range1 + this.rpp - 1;
     const params = new URLSearchParams({
+      filter: `{ "name" : "${this.search}" }`,
       range: `[${range1}, ${range2}]`,
     });
     this.setParams(params);
@@ -230,6 +240,9 @@ class RootStore {
   email = "";
   password = "";
   errorR = "";
+  address = "";
+  firstName = "";
+  lastName = "";
 
   setEmail = (value) => {
     this.email = value;
@@ -240,6 +253,15 @@ class RootStore {
   setErrorR = (value) => {
     this.errorR = value;
   };
+  setFirstName = (value) => {
+    this.firstName = value;
+  };
+  setLastName = (value) => {
+    this.lastName = value;
+  };
+  setAddress = (value) => {
+    this.address = value;
+  };
 
   onChangeEmail = (e) => {
     this.setEmail(e.target.value);
@@ -249,8 +271,34 @@ class RootStore {
     this.setPassword(e.target.value);
     this.setErrorR("");
   };
+  onChangeFirstName = (e) => {
+    this.setFirstName(e.target.value);
+    this.setErrorR("");
+  };
+  onChangeLastName = (e) => {
+    this.setLastName(e.target.value);
+    this.setErrorR("");
+  };
+  onChangeAddress = (e) => {
+    this.setAddress(e.target.value);
+    this.setErrorR("");
+  };
 
   validateAll = () => {
+    if (
+      this.email.length < 1 ||
+      this.password.length < 1 ||
+      this.firstName.length < 1 ||
+      this.lastName.length < 1 ||
+      this.address.length < 1
+    ) {
+      this.setErrorR("Obavezno popuniti polja!");
+      this.notifyCreateMake("obavezno popuniti polja");
+      // console.log("invalid");
+      return true;
+    }
+  };
+  validateAllLogin = () => {
     if (this.email.length < 1 || this.password.length < 1) {
       this.setErrorR("Obavezno popuniti polja!");
       this.notifyCreateMake("obavezno popuniti polja");
@@ -264,18 +312,30 @@ class RootStore {
   addUser = (e) => {
     e.preventDefault();
     if (!this.validateAll()) {
-      this.createUser(this.email, this.password);
+      this.createUser(
+        this.email,
+        this.password,
+        this.firstName,
+        this.lastName,
+        this.address
+      );
       this.setEmail("");
       this.setPassword("");
       this.setErrorR("");
+      this.setAddress("");
+      this.setLastName("");
+      this.setFirstName("");
     }
   };
 
-  createUser = async (email, password) => {
+  createUser = async (email, password, firstName, lastName, address) => {
     try {
       const response = await this.UserService.register({
         email: email,
         password: password,
+        firstName: firstName,
+        lastName: lastName,
+        address: address,
       });
 
       if (response.status >= 200 && response.status < 301) {
@@ -295,7 +355,7 @@ class RootStore {
   };
   logUser = (e) => {
     e.preventDefault();
-    if (!this.validateAll()) {
+    if (!this.validateAllLogin()) {
       this.loginUser(this.email, this.password);
       this.setEmail("");
       this.setPassword("");
@@ -312,7 +372,9 @@ class RootStore {
 
       if (response.status >= 200 && response.status < 301) {
         runInAction(() => {
-          // this.isLoggedIn = this.UserService.getUser().data;
+          // console.log("user ");
+          // const res = await this.UserService.getUser();
+          // console.log(res);
           // console.log(this.isLoggedIn);
           // console.log(this.UserService.getUser().status);
           this.getUser();
@@ -352,13 +414,16 @@ class RootStore {
       });
     }
   };
+  user = [];
   getUser = async () => {
     try {
       const response = await this.UserService.getUser();
       // console.log(response);
+      // console.log("response");
       if (response.status >= 200 && response.status < 301) {
         runInAction(() => {
           this.state = "success";
+          this.user = response.data;
           this.isLoggedIn = true;
         });
       }
@@ -408,6 +473,7 @@ class RootStore {
         this.orderCost += item.quantity * item.price;
         this.orderQuantity += item.quantity;
       });
+      this.orderCost = this.orderCost.toFixed(2);
     }
     console.log("cost: ", this.orderCost);
     console.log("q: ", this.orderQuantity);
@@ -477,6 +543,12 @@ class RootStore {
     try {
       const response = await this.OrderService.create({
         articles: order,
+        totalSum: this.orderCost,
+        totalQty: this.orderQuantity,
+        address: this.user.address,
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        status: 0,
       });
 
       if (response.status >= 200 && response.status < 301) {
@@ -506,6 +578,27 @@ class RootStore {
   };
 
   // ORDERS--------------------------------------------------------------
+  orders = [];
+  articlesInOrder = [];
+  getOrders = async () => {
+    this.state = "pending";
+
+    try {
+      const data = await this.OrderService.get();
+      // console.log(data);
+      runInAction(() => {
+        console.log(data.data);
+        this.orders = data.data;
+        // this.articlesInOrder = data.data.articles;
+        // console.log(this.numberOfCategories);
+        this.state = "success";
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.state = "error";
+      });
+    }
+  };
 }
 
 export default RootStore;

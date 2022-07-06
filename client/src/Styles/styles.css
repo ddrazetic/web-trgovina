@@ -790,4 +790,105 @@ footer p {
   border: 2px solid #d6d6d6;
   padding: 2px;
   cursor: pointer;
+}
+
+.profileInfo {
+  background-color: #0396d7;
+  max-width: 500px;
+  padding: 50px;
+  margin: 140px auto;
+  font-size: 31px;
+}
+.profileInfo p {
+  color: white;
+  text-shadow: 2px 2px 4px #005072;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid white;
+}
+.profileInfo p strong {
+  float: right;
+  color: white;
+  text-shadow: 2px 2px 4px #005072;
+}
+
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table caption {
+  font-size: 1.5em;
+  margin: 0.5em 0 0.75em;
+}
+
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 0.35em;
+}
+
+table th,
+table td {
+  padding: 0.625em;
+  text-align: center;
+}
+
+table th {
+  font-size: 0.85em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tableMarginBottom {
+  margin-bottom: 10px;
+}
+
+@media screen and (max-width: 900px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 0.625em;
+  }
+
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 1em;
+    text-align: right;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
 }/*# sourceMappingURL=styles.css.map */

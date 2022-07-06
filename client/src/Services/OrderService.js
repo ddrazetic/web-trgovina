@@ -5,9 +5,9 @@ class OrderService {
   get() {
     return axios.get(API_URL, { withCredentials: true });
   }
-  getAll() {
-    return axios.get(API_URL + "all");
-  }
+  // getAll() {
+  //   return axios.get(API_URL + "all");
+  // }
   //   get(params) {
   //     // console.log(`${API_URL}/vehiclemake?`, params);
   //     return axios.get(API_URL + "?" + params);

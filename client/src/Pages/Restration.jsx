@@ -25,6 +25,20 @@ const Registration = observer(() => {
             >
               {/* <input type="text" name="username" placeholder="Korisničko ime" /> */}
               <input
+                value={rootStore.firstName}
+                onChange={rootStore.onChangeFirstName}
+                type="text"
+                name="firstname"
+                placeholder="Ime"
+              />
+              <input
+                value={rootStore.lastName}
+                onChange={rootStore.onChangeLastName}
+                type="text"
+                name="lastname"
+                placeholder="Prezime"
+              />
+              <input
                 value={rootStore.email}
                 onChange={rootStore.onChangeEmail}
                 type="text"
@@ -38,6 +52,15 @@ const Registration = observer(() => {
                 name="password"
                 placeholder="Lozinka"
               />
+
+              <input
+                value={rootStore.address}
+                onChange={rootStore.onChangeAddress}
+                type="text"
+                name="address"
+                placeholder="Adresa"
+              />
+
               {/* <input type="text" name="adress" placeholder="Adresa" /> */}
               <p>{rootStore.errorR}</p>
               <button type="submit" className="btn">

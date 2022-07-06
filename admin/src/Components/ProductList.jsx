@@ -17,7 +17,7 @@ function ProductList(props) {
         <TextField source="name" />
         {/* <TextField source="id/category/name" /> */}
 
-        <TextField source="categoryId" />
+        <TextField source="category.name" />
         <TextField source="name" />
         <TextField source="description" />
         <TextField source="img_url" />
