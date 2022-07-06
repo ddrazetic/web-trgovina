@@ -14,11 +14,23 @@ module.exports = {
       },
       hash: {
           type: Sequelize.STRING,
-          required: true
+          allowNull: false
       },
       salt: {
           type: Sequelize.STRING,
-          required: true
+          allowNull: false
+      },
+      address: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      firstName: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      lastName: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

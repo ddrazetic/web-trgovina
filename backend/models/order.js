@@ -25,7 +25,31 @@ module.exports = (sequelize, DataTypes) => {
     articles:{
       type: DataTypes.JSON,
       allowNull: false
-    }
+    },
+    totalSum : {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    },
+    totalQty : {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    status : {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'Order',
