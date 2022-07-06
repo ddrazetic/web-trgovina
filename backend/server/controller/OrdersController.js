@@ -63,63 +63,20 @@ exports.show = async (req, res) => {
   });
 };
 
-exports.showAll = async (req, res) => {
-  res.set({
-    "Access-Control-Expose-Headers": "Content-Range",
-    "X-Total-Count": "100",
-    "Content-Range": "posts 0-30/100",
-    "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-  });
-  if (req.query.range) {
-    range = JSON.parse(req.query.range);
-    Order.findAll({
-      raw: true,
-      limit: range[1] - range[0] + 1,
-      offset: range[0],
-    })
-      .then((orders) => {
-        if (orders === null) {
-          return res.status(404).send("No orders available");
-        } else {
-          return res.status(200).send(orders);
-        }
-      })
-      .catch((err) => {
-        return res.status(400).send("Something went wrong");
-      });
-  } else {
-    Order.findAll({
-      raw: true,
-    })
-      .then((orders) => {
-        if (orders === null) {
-          return res.status(404).send("No orders available");
-        } else {
-          return res.status(200).send(orders);
-        }
-      })
-      .catch(() => {
-        return res.status(400).send("Something went wrong");
-      });
-  }
-};
 
 exports.delete = async (req, res) => {
   if (!req.user) {
     return res.status(401).send({ msg: "You must be logged in to do this!" });
   }
-  const order = await Order.findOne({ where: { id: req.params.id } })
+  Order.findOne({ where: { id: req.params.id } })
     .then(async (order) => {
       if (order === null) {
-        return res
-          .status(404)
-          .send({ msg: "Order with given id does not exist." });
+        return res.status(404).send({ msg: "Order with given id does not exist." });
       }
       if (order.userId !== req.user.id) {
         return res.status(401).send({ msg: "Unauthorized." });
       }
-      await order
-        .destroy()
+      await order.destroy()
         .then(() => {
           return res.status(200).send({ msg: "Order successfully deleted." });
         })
@@ -136,18 +93,15 @@ exports.edit = async (req, res) => {
   if (!req.user) {
     return res.status(401).send({ msg: "You must be logged in to do this." });
   }
-  const order = await Order.findOne({ where: { id: req.params.id } })
+  Order.findOne({ where: { id: req.params.id } })
     .then(async (order) => {
       if (order === null) {
-        return res
-          .status(404)
-          .send({ msg: "Order with given id does not exist." });
+        return res.status(404).send({ msg: "Order with given id does not exist." });
       }
       if (order.userId !== req.user.id) {
         return res.status(401).send({ msg: "Unauthorized" });
       }
-      await order
-        .update({
+      await order.update({
           articles: req.body.articles,
           totalSum: req.body.totalSum,
           totalQty: req.body.totalQty,
