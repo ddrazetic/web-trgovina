@@ -3,8 +3,19 @@ npx sequelize-cli db:migrate
 
 
 Popunjavanje podacima:
-npx sequelize-cli db:seed --seed '20220701133638-demo-categories'
-npx sequelize-cli db:seed --seed '20220701140936-demo-articles'  
+npx sequelize-cli db:seed --seed '20220701133638-demo-categories' 
+npx sequelize-cli db:seed --seed '20220701140936-demo-articles' 
+
+\n npx sequelize-cli db:seed --seed '20220706223704-seed-laptopi' \n npx sequelize-cli db:seed --seed '20220706225535-seed-racunala' \n npx sequelize-cli db:seed --seed '20220706225850-seed-monitori' \n npx sequelize-cli db:seed --seed '20220706230121-seed-periferija' \n npx sequelize-cli db:seed --seed '20220706230409-seed-pohrana' \n npx sequelize-cli db:seed --seed '20220706230534-seed-gaming' \n npx sequelize-cli db:seed --seed '20220706230643-seed-baterije' \n npx sequelize-cli db:seed --seed '20220706230727-seed-mobiteli'
+
+
 
 Brisanje svega:
+npx sequelize-cli db:migrate:undo:all
+
+
+npx sequelize-cli db:migrate \n npx sequelize-cli db:seed --seed '20220701133638-demo-categories' \n npx sequelize-cli db:seed --seed '20220701140936-demo-articles' \n npx sequelize-cli db:seed --seed '20220706223704-seed-laptopi' \n npx sequelize-cli db:seed --seed '20220706225535-seed-racunala' \n npx sequelize-cli db:seed --seed '20220706225850-seed-monitori' \n npx sequelize-cli db:seed --seed '20220706230121-seed-periferija' \n npx sequelize-cli db:seed --seed '20220706230409-seed-pohrana' \n npx sequelize-cli db:seed --seed '20220706230534-seed-gaming' \n npx sequelize-cli db:seed --seed '20220706230643-seed-baterije' \n npx sequelize-cli db:seed --seed '20220706230727-seed-mobiteli'
+
+
+
 npx sequelize-cli db:migrate:undo:all
