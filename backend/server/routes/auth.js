@@ -7,5 +7,6 @@ router.post("/login", passport.authenticate("local"), authController.login);
 router.get("/user", authController.user);
 router.get("/logout", authController.logout);
 router.post("/register", authController.register);
+router.get('/all', authController.index);
 
 module.exports = router;
