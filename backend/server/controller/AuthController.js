@@ -2,14 +2,46 @@ const User = require("../model/User");
 const { genPassword } = require("../database/passwordUtils");
 
 exports.login = (req, res) => {
-    res.status(200).json({ user: {id: req.user.id, email: req.user.email}, msg: 'Successfully logged in!'});
+    if(req.isAuthenticated()){
+        const user = User.findOne({
+            raw: true,
+            attributes: {
+                exclude: ['hash','salt','createdAt','updatedAt']
+            },
+            where: {
+                id: req.user.id
+            }
+        }).then(user => {
+            if(user === null){
+                return res.status(500).send({msg: 'Something went wrong'})
+            }else{
+                return res.status(200).send({user: user, msg: 'Successfully logged in!'});
+            }
+        })
+    }else{
+        return res.status(401).send('Unauthorized');
+    }
 }
 
-exports.user = (req, res) => {
+exports.user = async (req, res) => {
     if(req.isAuthenticated()){
-        res.status(200).json( { id: req.user.id, email: req.user.email} );
+        const user = User.findOne({
+            raw: true,
+            attributes: {
+                exclude: ['hash','salt']
+            },
+            where: {
+                id: req.user.id
+            }
+        }).then(user => {
+            if(user === null){
+                return res.status(500).send({msg: 'Logged user cant be found'})
+            }else{
+                return res.status(200).send(user);
+            }
+        })
     }else{
-        res.status(401).send('Unauthorized');
+        return res.status(401).send('Unauthorized');
     }
 }
 
@@ -47,15 +79,18 @@ exports.register = (req, res) => {
                 const newUser = await User.create({
                     email : req.body.email,
                     hash: saltHash.hash,
-                    salt: saltHash.salt
+                    salt: saltHash.salt,
+                    address: req.body.address,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName
                 }).then((user) => {
-                    console.log('after create')
                     user = user.get({plain:true});
                     req.login(user, err =>{
                         if(err){
                             console.log(err);
                         }
-                        return res.status(200).send({user: {id: user.id, email: user.email}, msg: 'Successfully registered!'});
+                        return res.status(200).send({user: {id: user.id, email: user.email, address: user.address, firstName: user.firstName, lastName: user.lastName}, 
+                            msg: 'Successfully registered!'});
                     })
                 })
                 .catch(err => {

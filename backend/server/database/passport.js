@@ -30,14 +30,12 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function(user, done) {
-  console.log(user);
     process.nextTick(function() {
       done(null, { id: user.id, email: user.email });
     });
   });
 
   passport.deserializeUser(async function(user, done) {
-    console.log(user)
     process.nextTick(async () => {
       await User.findOne({
         raw: true,

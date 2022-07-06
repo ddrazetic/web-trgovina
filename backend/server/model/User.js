@@ -13,12 +13,24 @@ const User = db.define('user', {
     },
     hash: {
         type: DataTypes.STRING,
-        required: true
+        allowNull: false
     },
     salt: {
         type: DataTypes.STRING,
-        required: true
-    }
+        allowNull: false
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
 
 
 })

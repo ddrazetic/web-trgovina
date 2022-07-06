@@ -7,6 +7,12 @@ exports.store = async (req, res) => {
   Order.create({
     userId: req.user.id,
     articles: req.body.articles,
+    totalSum: req.body.totalSum,
+    totalQty: req.body.totalQty,
+    address: req.body.address,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    status: req.body.status
   })
     .then((order) => {
       return res.status(200).send(order);
@@ -143,6 +149,12 @@ exports.edit = async (req, res) => {
       await order
         .update({
           articles: req.body.articles,
+          totalSum: req.body.totalSum,
+          totalQty: req.body.totalQty,
+          address: req.body.address,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          status: req.body.status
         })
         .then((order) => {
           return res.status(200).send(order);
