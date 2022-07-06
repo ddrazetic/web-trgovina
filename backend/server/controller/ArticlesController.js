@@ -1,5 +1,6 @@
 const Article = require("../model/Article");
 const Category = require("../model/Category");
+const { Op } = require("sequelize");
 
 exports.index = async (req, res) => {
   res.set({
@@ -8,38 +9,39 @@ exports.index = async (req, res) => {
     "Content-Range": "posts 0-30/30",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
   });
-  if (req.query.range) {
-    range = JSON.parse(req.query.range);
-    Article.findAll({
-      raw: true,
-      limit: range[1] - range[0] + 1,
-      offset: range[0],
-    })
-      .then(async (articles) => {
-        if (articles === null) {
-          return res.status(404).send({ msg: "Articles dont exist" });
-        } else {
-          return res.status(200).send(articles);
-        }
-      })
-      .catch((err) => {
-        return res.status(400).send("Something went wrong");
-      });
-  } else {
-    Article.findAll({
-      raw: true,
-    })
-      .then(async (articles) => {
-        if (articles === null) {
-          return res.status(404).send({ msg: "Articles dont exist" });
-        } else {
-          return res.status(200).send(articles);
-        }
-      })
-      .catch((err) => {
-        return res.status(400).send({ msg: err });
-      });
+  // Create basic options for querying Model
+  let options = {
+    raw: true,
+    include: Category
   }
+  // In case additional paging is requested append range options
+  if(req.query.range){
+    range = JSON.parse(req.query.range);
+    options.limit = range[1] - range[0] + 1;
+    options.offset = range[0];
+  }
+  // In case additional filtering is requested append where clauses
+  if(req.query.filter){
+    filter = JSON.parse(req.query.filter);
+    let whereClause = {};
+    if(filter.name){
+      whereClause.name = {
+        [Op.iLike]: `%${filter.name}%`
+      }
+    }
+    options.where = whereClause;
+  }
+  Article.findAll(options)
+    .then(async (articles) => {
+      if (articles === null) {
+        return res.status(404).send({ msg: "Articles dont exist" });
+      } else {
+        return res.status(200).send(articles);
+      }
+    })
+    .catch((err) => {
+      return res.status(400).send("Something went wrong");
+    });
 };
 
 exports.show = (req, res) => {

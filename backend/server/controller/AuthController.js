@@ -1,6 +1,21 @@
 const User = require("../model/User");
 const { genPassword } = require("../database/passwordUtils");
 
+exports.index = (req,res) => {
+    User.findAll({
+        raw: true,
+        attributes: {
+            exclude: ['hash','password']
+        }
+    }).then(users => {
+        if(users === null){
+            return res.status(404).send({msg: 'No users found.'})
+        }else{
+            return res.status(200).send(users)
+        }
+    })
+}
+
 exports.login = (req, res) => {
     if(req.isAuthenticated()){
         const user = User.findOne({
